@@ -1,6 +1,5 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
 import { google } from "googleapis";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { getEnv } from "../../config/envs";
 
 export default async function handler(
@@ -21,8 +20,11 @@ export default async function handler(
     });
 
     const gSheets = google.sheets({ version: "v4", auth });
+
+    const spreadsheetId = extractSpreadsheetId(req.query.uri as string)
+
     const worksheet = await gSheets.spreadsheets.values.get({
-      spreadsheetId: "12iOevbVBhfuBq62oAj-cgTYlwAIqpuU4j6cEzpbwBb0",
+      spreadsheetId,
       range: "Geral!A:E",
     });
 
@@ -48,3 +50,9 @@ const toJSON = (rows: any) => {
 
   return json;
 };
+
+const extractSpreadsheetId = (url: string) => {
+  const pattern = /\/d\/([a-zA-Z0-9-_]+)\//;
+  const match = url.match(pattern);
+  return match ? match[1] : null;
+}
