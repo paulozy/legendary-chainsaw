@@ -1,7 +1,13 @@
-export function Header() {
+import { User } from "../..";
+
+type HeaderProps = {
+  user: User
+}
+
+export function Header({ user }: HeaderProps) {
   return (
     <header className="flex justify-between items-center">
-      <h1 className="text-3xl">Olá, Paulo!</h1>
+      <h1 className="text-3xl">Olá, {user.name}!</h1>
 
       <div className="flex justify-center items-center gap-3">
         <ul className="flex bg-white rounded-md text-[14px] overflow-hidden">

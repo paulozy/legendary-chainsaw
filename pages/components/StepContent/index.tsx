@@ -1,0 +1,199 @@
+import { Box, Button, Paper, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
+import Image from "next/image";
+import { useState } from "react";
+import dataAnalysisImage from '../../../public/data_analysis.svg';
+import setupImage from '../../../public/setup1.svg';
+import stepsImage from '../../../public/steps.svg';
+
+export function StepContentOne() {
+  return (
+    <div className="mt-5 flex flex-col justify-center text-center">
+      <h2 className="font-bold text-3xl">Seja bem vindo ao <span className="text-[#155EEF]">Resumos Financeiros</span></h2>
+      <p className="text-[16px] text-[#516778] mt-1">Um aplicativo criado para visualizar a sua vida financeira de forma simples, fácil e rápido</p>
+
+      <Image src={dataAnalysisImage} alt="" />
+    </div>
+  )
+}
+
+const steps = [
+  {
+    label: 'Informar seu nome',
+    description: `Com seu nome conseguimos te oferecer uma experiência ainda mais imersiva.`,
+  },
+  {
+    label: 'Acessar a planilha modelo',
+    description: `Acesse a planilha modelo e faça uma cópia dela.`,
+    instructions: 'OBS: Menu superior esquerdo -> Arquivo -> Fazer uma cópia'
+  },
+  {
+    label: 'Preencher a planilha',
+    description: `Nessa etapa você irá preencher a planilha com os seus dados, está será uma etapa
+      recorrente enquanto você usa essa aplicação.`
+  },
+  {
+    label: 'Importar a planilha',
+    description: `Após preencher a planilha, você irá compartilha-la com qualquer pessoa que tenha
+      o link, assim poderemos consumir os dados da planilha e gerar os gráficos e resumos para você.`
+  }
+]
+
+export function StepContentTwo() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const handleReset = () => setActiveStep(0);
+
+  const defaultWorksheetURL = "https://docs.google.com/spreadsheets/d/12iOevbVBhfuBq62oAj-cgTYlwAIqpuU4j6cEzpbwBb0/edit?gid=0#gid=0"
+
+  const backButtonMargin = activeStep === steps.length - 1 ? 0 : 1
+  const backButtonVariant = activeStep === steps.length - 1 ? "contained" : "text"
+
+  return (
+    <div className="mt-5">
+      <h2 className="font-bold text-2xl text-center">Aqui é <span className="text-[#155EEF]">TUDO</span> muito <span className="text-[#155EEF]">SIMPLES</span></h2>
+      <p className="text-[16px] text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ídeia dos próximos passos.</p>
+
+
+      <div className="flex justify-center items-center">
+        <div>
+          <Box sx={{ maxWidth: 400, minWidth: 400 }} className="mt-5 ">
+            <Stepper activeStep={activeStep} orientation="vertical">
+              {steps.map((step, index) => (
+                <Step key={step.label}>
+                  <StepLabel
+                    optional={
+                      index === steps.length - 1 ? (
+                        <Typography variant="caption">Último passo</Typography>
+                      ) : null
+                    }
+                  >
+                    {step.label}
+                  </StepLabel>
+                  <StepContent>
+                    <Typography>{step.description}</Typography>
+                    <Typography style={{ fontSize: 13 }}>{step.instructions}</Typography>
+                    <Box sx={{ mb: 2 }}>
+                      <div>
+                        {index === 1 ? <a
+                          className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1f5ro5o-MuiButtonBase-root-MuiButton-root"
+                          href={defaultWorksheetURL}
+                          target="_blank"
+                        >
+                          Planilha
+                        </a> : null}
+
+
+                        {index === steps.length - 1 ? null : (
+                          <Button
+                            variant="contained"
+                            onClick={handleNext}
+                            sx={{ mt: 1, mr: 1 }}
+                          >
+                            Continue
+                          </Button>
+                        )}
+
+                        <Button
+                          variant={backButtonVariant}
+                          disabled={index === 0}
+                          onClick={handleBack}
+                          sx={{ mt: 1, mr: backButtonMargin }}
+                        >
+                          Voltar
+                        </Button>
+                      </div>
+                    </Box>
+                  </StepContent>
+                </Step>
+              ))}
+            </Stepper>
+            {activeStep === steps.length && (
+              <Paper square elevation={0} sx={{ p: 3 }}>
+                <Typography>All steps completed - you&apos;re finished</Typography>
+                <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                  Reset
+                </Button>
+              </Paper>
+            )}
+          </Box>
+        </div>
+
+        <Image src={stepsImage} alt="" width={300} />
+      </div>
+    </div >
+  )
+}
+
+type StepContentThreeProps = {
+  userName: string
+  setUserName: Function
+  spreadsheetURL: string
+  setSpreadsheetURL: Function
+  isValidGoogleSheetsUrl: Function
+}
+
+export function StepContentThree({ userName, setUserName, spreadsheetURL, setSpreadsheetURL, isValidGoogleSheetsUrl }: StepContentThreeProps) {
+  const [msgNameError, setMsgNameError] = useState({ error: false, msg: null })
+  const [msgSpreadsheetURLError, setMsgSpreadsheetURLError] = useState({ error: false, msg: null })
+
+  const onChangeName = (e) => {
+    if (e.target.value.length < 3) {
+      setMsgNameError({ error: true, msg: 'O nome deve ter mais de 3 caracteres' })
+      setUserName(e.target.value)
+    } else {
+      setMsgNameError({ error: false, msg: null })
+      setUserName(e.target.value)
+    }
+  }
+
+  const onChangeSpreadsheetURL = (e) => {
+    if (!isValidGoogleSheetsUrl(e.target.value)) {
+      setMsgSpreadsheetURLError({ error: true, msg: 'O link precisa ser de uma planilha do: Google Planilhas' })
+      setSpreadsheetURL(e.target.value)
+    } else {
+      setMsgSpreadsheetURLError({ error: false, msg: null })
+      setSpreadsheetURL(e.target.value)
+    }
+  }
+
+  return (
+    <div className="mt-5">
+      <h2 className="font-bold text-3xl text-center"><span className="text-[#155EEF]">Último passo, </span>vamos lá!</h2>
+      <p className="text-[16px] text-[#516778] mt-1 text-center">Você está a um passo de tornar seu controle financeiro mais fácil</p>
+
+      <div className="flex flex-col items-center">
+        <div className="mt-5 w-[50%]">
+          <div>
+            <label htmlFor="name" className="block font-semibold">Nome:</label>
+            <input
+              onChange={onChangeName}
+              type="text"
+              placeholder="ex: John Doe"
+              id="name"
+              value={userName}
+              className="border-[1px] px-2 py-1 rounded-md border-[#155EEF] mt-[2px] w-full focus:outline-none"
+            />
+            {msgNameError.error ? <span className="text-red-500">{msgNameError.msg}</span> : null}
+          </div>
+
+          <div className="mt-3">
+            <label htmlFor="spreadsheet" className="block font-semibold">Link da planilha:</label>
+            <input
+              onChange={onChangeSpreadsheetURL}
+              type="text"
+              placeholder="Cole aqui o link da sua planilha"
+              id="spreadsheet"
+              value={spreadsheetURL}
+              className="border-[1px] px-2 py-1 rounded-md border-[#155EEF] mt-[2px] w-full focus:outline-none"
+            />
+            {msgSpreadsheetURLError.error ? <span className="text-red-500">{msgSpreadsheetURLError.msg}</span> : null}
+          </div>
+        </div>
+
+        <Image src={setupImage} alt="" height={400} />
+      </div>
+    </div>
+  )
+} 

@@ -1,6 +1,6 @@
 type ResumeCardProps = {
   amount: number;
-  isBalance: boolean;
+  isBalance?: boolean;
   variation: number;
   title: string;
 };
