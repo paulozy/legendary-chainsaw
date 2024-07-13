@@ -1,18 +1,26 @@
 "use client";
 
-import type { NextPage } from "next";
-import { Header } from "./components/Header";
-import { ResumeCard } from "./components/ResumeCard";
-import { PieChart } from "./components/PieChart";
 import {
+  Box,
+  Button,
+  Modal,
   Paper,
+  Step,
+  StepLabel,
+  Stepper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from "@mui/material";
+import type { NextPage } from "next";
+import { useState } from "react";
+import { Header } from "./components/Header";
+import { PieChart } from "./components/PieChart";
+import { ResumeCard } from "./components/ResumeCard";
+import { StepContentOne, StepContentThree, StepContentTwo } from "./components/StepContent";
 
 function createData(
   name: string,
@@ -52,81 +60,181 @@ const data = {
   },
 };
 
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '40%',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  borderRadius: 2,
+  p: 4,
+};
+
+export type User = {
+  name: string;
+  spreadsheetURI: string;
+}
+
+const steps = ['Seja bem vindo(a)', 'Como funcina?', 'Configurar'];
+
 const Home: NextPage = () => {
+  const [user, setUser] = useState<User>(undefined)
+  const [isModalOpen, setIsModalOpen] = useState(true)
+  const [activeStep, setActiveStep] = useState(0);
+  const [userName, setUserName] = useState<string>()
+  const [spreadsheetURL, setSpreadsheetURL] = useState<string>()
+  const [transactions, setTransactions] = useState({})
+
+  const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
+  const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const handleSubmit = async () => {
+    const sla = await fetch(`/api/worksheet?uri=${spreadsheetURL}`)
+    const json = await sla.json()
+    setTransactions(json)
+    setUser({ name: userName, spreadsheetURI: spreadsheetURL })
+    setIsModalOpen(false)
+  }
+
   return (
-    <main className="h-lvh px-64 py-6 bg-[#eff4fa]">
-      <Header />
+    <>
+      {/* <TutorStepper /> */}
 
-      {/* cards */}
-      <section className="w-full grid grid-cols-4 gap-8 mt-10">
-        <ResumeCard isBalance={true} title="Balanço" />
-        <ResumeCard title="Receitas" />
-        <ResumeCard title="Despesas" />
-        <ResumeCard title="Investimentos" />
-      </section>
+      <Modal
+        open={isModalOpen}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Stepper activeStep={activeStep}>
+            {steps.map((label, index) => {
+              const stepProps: { completed?: boolean } = {};
+              return (
+                <Step key={label} {...stepProps}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+          {activeStep === steps.length ? <span>Loading Data</span> : (
+            <>
+              {
+                activeStep === 0 ? <StepContentOne /> : activeStep === 1
+                  ? <StepContentTwo /> : <StepContentThree userName={userName} setUserName={setUserName} spreadsheetURL={spreadsheetURL} setSpreadsheetURL={setSpreadsheetURL} isValidGoogleSheetsUrl={isValidGoogleSheetsUrl} />
+              }
 
-      <section className="flex gap-8 mt-8">
-        <PieChart series={data.series} options={data.options} />
+              <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                <Button
+                  color="inherit"
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  sx={{ mr: 1 }}
+                >
+                  Voltar
+                </Button>
+                <Box sx={{ flex: '1 1 auto' }} />
+                {activeStep === steps.length - 1
+                  ? (
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={!userName || userName.length < 3 || !spreadsheetURL || !isValidGoogleSheetsUrl(spreadsheetURL)}
+                    >
+                      Finalizar
+                    </Button>
+                  )
+                  : (
+                    <Button onClick={handleNext} >
+                      Próximo
+                    </Button>
+                  )}
+              </Box>
+            </>
+          )}
+        </Box >
+      </Modal >
 
-        <div className="flex-1 bg-white rounded-xl overflow-hidden">
-          <div className="p-6">
-            <h3 className="font-semibold text-[18px]">Últimos registros</h3>
-            <p className="text-[#516778] text-sm">
-              Aqui estão os seus ultimos registros
-            </p>
-          </div>
+      {!user ? null : (
+        <main className="h-lvh px-64 py-6 bg-[#eff4fa]">
+          <Header user={user} />
 
-          <TableContainer component={Paper}>
-            <Table padding="normal">
-              <TableHead className="bg-[#f9fafb]">
-                <TableRow>
-                  <TableCell className="text-[#516778] px-6">
-                    Descrição
-                  </TableCell>
-                  <TableCell className="text-[#516778] px-6" align="right">
-                    Tipo
-                  </TableCell>
-                  <TableCell className="text-[#516778] px-6" align="right">
-                    Categoria
-                  </TableCell>
-                  <TableCell className="text-[#516778] px-6" align="right">
-                    Valor
-                  </TableCell>
-                  <TableCell className="text-[#516778] px-6" align="right">
-                    Data
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row" className="px-6">
-                      {row.name}
-                    </TableCell>
-                    <TableCell className="px-6" align="right">
-                      {row.calories}
-                    </TableCell>
-                    <TableCell className="px-6" align="right">
-                      {row.fat}
-                    </TableCell>
-                    <TableCell className="px-6" align="right">
-                      {row.carbs}
-                    </TableCell>
-                    <TableCell className="px-6" align="right">
-                      {row.protein}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
-      </section>
-    </main>
+          {/* cards */}
+          <section className="w-full grid grid-cols-4 gap-8 mt-10">
+            <ResumeCard isBalance={true} title="Balanço" />
+            <ResumeCard title="Receitas" />
+            <ResumeCard title="Despesas" />
+            <ResumeCard title="Investimentos" />
+          </section>
+
+          <section className="flex gap-8 mt-8">
+            <PieChart series={data.series} options={data.options} />
+
+            <div className="flex-1 bg-white rounded-xl overflow-hidden">
+              <div className="p-6">
+                <h3 className="font-semibold text-[18px]">Últimos registros</h3>
+                <p className="text-[#516778] text-sm">
+                  Aqui estão os seus ultimos registros
+                </p>
+              </div>
+
+              <TableContainer component={Paper}>
+                <Table padding="normal">
+                  <TableHead className="bg-[#f9fafb]">
+                    <TableRow>
+                      <TableCell className="text-[#516778] px-6">
+                        Descrição
+                      </TableCell>
+                      <TableCell className="text-[#516778] px-6" align="right">
+                        Tipo
+                      </TableCell>
+                      <TableCell className="text-[#516778] px-6" align="right">
+                        Categoria
+                      </TableCell>
+                      <TableCell className="text-[#516778] px-6" align="right">
+                        Valor
+                      </TableCell>
+                      <TableCell className="text-[#516778] px-6" align="right">
+                        Data
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      >
+                        <TableCell component="th" scope="row" className="px-6">
+                          {row.name}
+                        </TableCell>
+                        <TableCell className="px-6" align="right">
+                          {row.calories}
+                        </TableCell>
+                        <TableCell className="px-6" align="right">
+                          {row.fat}
+                        </TableCell>
+                        <TableCell className="px-6" align="right">
+                          {row.carbs}
+                        </TableCell>
+                        <TableCell className="px-6" align="right">
+                          {row.protein}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          </section>
+        </main>
+      )}
+    </>
   );
 };
+
+const isValidGoogleSheetsUrl = (url: string) => {
+  const regex = /^https:\/\/docs\.google\.com\/spreadsheets\/d\/[a-zA-Z0-9-_]+(\/edit)?(\?[^#]*)?(#gid=\d+)?$/;
+  return regex.test(url);
+}
 
 export default Home;
