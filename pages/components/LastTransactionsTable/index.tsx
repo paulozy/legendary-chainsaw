@@ -7,23 +7,28 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { Transaction } from "../../types";
 
 type LastTransactionsTableProps = {
-  transactions: {
-    id: number;
-    description: string;
-    type: string;
-    category: string;
-    value: number;
-    date: string;
-  }[];
+  transactions: Transaction[];
 };
 
 export function LastTransactionsTable({
   transactions,
 }: LastTransactionsTableProps) {
+
+  function formatCurrency(value: number, locale = 'pt-BR', currency = 'BRL') {
+    const formatter = new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    return formatter.format(value);
+  }
+
   return (
-    <>
+    <div className="flex-1 bg-white rounded-xl overflow-hidden">
       <div className="p-6">
         <h3 className="font-semibold text-[18px]">Últimos registros</h3>
         <p className="text-[#516778] text-sm">
@@ -36,46 +41,46 @@ export function LastTransactionsTable({
           <TableHead className="bg-[#f9fafb]">
             <TableRow>
               <TableCell className="text-[#516778] px-6">Descrição</TableCell>
-              <TableCell className="text-[#516778] px-6" align="right">
+              <TableCell className="text-[#516778] px-6" align="left">
                 Tipo
               </TableCell>
-              <TableCell className="text-[#516778] px-6" align="right">
+              <TableCell className="text-[#516778] px-6" align="left">
                 Categoria
               </TableCell>
-              <TableCell className="text-[#516778] px-6" align="right">
+              <TableCell className="text-[#516778] px-6" align="left">
                 Valor
               </TableCell>
-              <TableCell className="text-[#516778] px-6" align="right">
+              <TableCell className="text-[#516778] px-6" align="left">
                 Data
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {transactions.map((row) => (
               <TableRow
-                key={row.name}
+                key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row" className="px-6">
-                  {row.name}
+                  {row.description}
                 </TableCell>
-                <TableCell className="px-6" align="right">
-                  {row.calories}
+                <TableCell className="px-6" align="left">
+                  {row.type}
                 </TableCell>
-                <TableCell className="px-6" align="right">
-                  {row.fat}
+                <TableCell className="px-6" align="left">
+                  {row.category}
                 </TableCell>
-                <TableCell className="px-6" align="right">
-                  {row.carbs}
+                <TableCell className="px-6" align="left">
+                  {formatCurrency(row.value)}
                 </TableCell>
-                <TableCell className="px-6" align="right">
-                  {row.protein}
+                <TableCell className="px-6" align="left">
+                  {row.date}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }

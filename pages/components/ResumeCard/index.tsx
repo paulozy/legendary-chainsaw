@@ -11,6 +11,14 @@ export function ResumeCard({
   variation,
   title,
 }: ResumeCardProps) {
+
+  const formattedAmount = new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount)
+
   return (
     <div className="bg-white p-6 rounded-md drop-shadow-md">
       <p className="text-[14px] text-[#516778]">{title}</p>
@@ -18,7 +26,7 @@ export function ResumeCard({
         <h2
           className={`text-3xl ${isBalance ? "text-[#155EEF]" : ""} font-semibold`}
         >
-          R$1.000,00
+          {formattedAmount}
         </h2>
         <span className="border-[#D5DDE2] border-2 px-2 rounded-md flex items-center">
           {/* variation bases on filter */}

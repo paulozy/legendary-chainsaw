@@ -1,12 +1,15 @@
 import { google } from "googleapis";
+import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getEnv } from "../../config/envs";
+import { Transaction } from "../types";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   try {
+    const {uri, lastTen} = req.query
     const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 
     const env = getEnv();
@@ -21,14 +24,28 @@ export default async function handler(
 
     const gSheets = google.sheets({ version: "v4", auth });
 
-    const spreadsheetId = extractSpreadsheetId(req.query.uri as string)
+    const spreadsheetId = extractSpreadsheetId(uri as string)
 
     const worksheet = await gSheets.spreadsheets.values.get({
       spreadsheetId,
       range: "Geral!A:E",
     });
 
-    res.status(200).json(toJSON(worksheet.data.values));
+    let transactions: Transaction[] = toJSON(worksheet.data.values)
+
+    transactions.sort((a, b) => {
+        const aDate = moment(a.date).unix()
+        const bDate = moment(b.date).unix()
+
+        return aDate - bDate
+    }).reverse()
+
+    const categories = new Set()
+    for(const transaction of transactions) {
+      if(transaction.type === 'DESPESA') categories.add(transaction.category)
+    }
+
+    res.status(200).json({transactions, categories: Array.from(categories)});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -39,10 +56,17 @@ const toJSON = (rows: any) => {
   rows.shift();
 
   const json = rows.map((row: any) => {
+    let number = row[2].replace(/[^\d,.-]/g, '');
+    number.replace(',', '.');
+    number = number.replace(/\./g, '');
+
+    number = parseFloat(number);
+
     return {
+      id: crypto.randomUUID(),
       type: row[0],
       description: row[1],
-      value: row[2],
+      value: number,
       category: row[3],
       date: row[4],
     };

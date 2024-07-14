@@ -15,8 +15,8 @@ export function PieChart({ series, options }: PieChartProps) {
     <div className="w-[430px] bg-white rounded-xl p-6">
       <h3 className="font-semibold text-[16px]">Despesas por categoria</h3>
 
-      <div className="mt-6">
-        <Chart options={options} series={series} type="donut" />
+      <div className="mt-6 flex flex-col justify-center items-center">
+        <Chart options={options} series={series} type="donut" width={430} />
       </div>
     </div>
   );
