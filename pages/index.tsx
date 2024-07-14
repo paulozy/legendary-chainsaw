@@ -20,7 +20,7 @@ import { useState } from "react";
 import { Header } from "./components/Header";
 import { PieChart } from "./components/PieChart";
 import { ResumeCard } from "./components/ResumeCard";
-import { StepContentOne, StepContentThree, StepContentTwo } from "./components/StepContent";
+import { StepContentOne, StepContentTwo } from "./components/StepContent";
 
 function createData(
   name: string,
@@ -65,7 +65,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '40%',
+  width: '60%',
   bgcolor: 'background.paper',
   boxShadow: 24,
   borderRadius: 2,
@@ -77,7 +77,7 @@ export type User = {
   spreadsheetURI: string;
 }
 
-const steps = ['Seja bem vindo(a)', 'Como funcina?', 'Configurar'];
+const steps = ['Seja bem vindo(a)', 'Como funcina?'];
 
 const Home: NextPage = () => {
   const [user, setUser] = useState<User>(undefined)
@@ -91,6 +91,12 @@ const Home: NextPage = () => {
   const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
   const handleSubmit = async () => {
     const sla = await fetch(`/api/worksheet?uri=${spreadsheetURL}`)
+
+    if (sla.status !== 200) {
+      const err = await sla.json()
+      return alert(err.error)
+    }
+''
     const json = await sla.json()
     setTransactions(json)
     setUser({ name: userName, spreadsheetURI: spreadsheetURL })
@@ -120,8 +126,7 @@ const Home: NextPage = () => {
           {activeStep === steps.length ? <span>Loading Data</span> : (
             <>
               {
-                activeStep === 0 ? <StepContentOne /> : activeStep === 1
-                  ? <StepContentTwo /> : <StepContentThree userName={userName} setUserName={setUserName} spreadsheetURL={spreadsheetURL} setSpreadsheetURL={setSpreadsheetURL} isValidGoogleSheetsUrl={isValidGoogleSheetsUrl} />
+                activeStep === 0 ? <StepContentOne /> : <StepContentTwo setUserName={setUserName} userName={userName} setSpreadsheetURL={setSpreadsheetURL} spreadsheetURL={spreadsheetURL} isValidGoogleSheetsUrl={isValidGoogleSheetsUrl} />
               }
 
               <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
