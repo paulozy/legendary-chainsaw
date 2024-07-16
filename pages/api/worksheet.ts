@@ -24,7 +24,15 @@ export default async function handler(
 
     const gSheets = google.sheets({ version: "v4", auth });
 
+    const defaultSpreadsheetId = "18VHeypfw8WCiqNjldT3koGnjPCZzl3fqGHRw8KBIrvg"
     const spreadsheetId = extractSpreadsheetId(uri as string)
+
+    if(defaultSpreadsheetId === spreadsheetId) {
+      res.status(403).send({
+        error: 'Não é possivel improtar a planilha modelo'
+      })
+    }
+
 
     const worksheet = await gSheets.spreadsheets.values.get({
       spreadsheetId,

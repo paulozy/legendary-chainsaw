@@ -75,41 +75,45 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async () => {
-    setIsLoading(true)
+    try {
+      setIsLoading(true)
 
-    let userObj = {} as User
+      let userObj = {} as User
 
-    if (!userName || !spreadsheetURL) {
-      userObj = JSON.parse(localStorage.getItem('user'))
-    } else {
-      userObj = { name: userName, spreadsheetURI: spreadsheetURL }
-    }
-
-    const { transactions, categories } = await fetchTransactions(userObj)
-
-    const totalsPerCategory = {};
-
-    for (const ctg of categories) {
-      totalsPerCategory[ctg] = 0
-    }
-
-    for (const transaction of transactions) {
-      if (totalsPerCategory.hasOwnProperty(transaction.category)) {
-        totalsPerCategory[transaction.category] += transaction.value
+      if (!userName || !spreadsheetURL) {
+        userObj = JSON.parse(localStorage.getItem('user'))
+      } else {
+        userObj = { name: userName, spreadsheetURI: spreadsheetURL }
       }
+
+      const { transactions, categories } = await fetchTransactions(userObj)
+
+      const totalsPerCategory = {};
+
+      for (const ctg of categories) {
+        totalsPerCategory[ctg] = 0
+      }
+
+      for (const transaction of transactions) {
+        if (totalsPerCategory.hasOwnProperty(transaction.category)) {
+          totalsPerCategory[transaction.category] += transaction.value
+        }
+      }
+
+      const series = Object.entries(totalsPerCategory).map(([_, total]) => (total));
+
+      setTransactions(transactions)
+      setIsModalOpen(false)
+      setUser(userObj)
+      setSeries(series as any)
+      setPieChartData(getOptions(categories) as any)
+
+      localStorage.setItem('user', JSON.stringify(userObj))
+
+      setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
     }
-
-    const series = Object.entries(totalsPerCategory).map(([_, total]) => (total));
-
-    setTransactions(transactions)
-    setIsModalOpen(false)
-    setUser(userObj)
-    setSeries(series as any)
-    setPieChartData(getOptions(categories) as any)
-
-    localStorage.setItem('user', JSON.stringify(userObj))
-
-    setIsLoading(false)
   }
 
   const tutorModalProps = {

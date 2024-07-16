@@ -31,7 +31,7 @@ export function ResumeCard({
         <span className="border-[#D5DDE2] border-2 px-2 rounded-md flex items-center">
           {/* variation bases on filter */}
           {/* <Image src={upIcon} alt="" width={15} height={15} /> */}
-          12,5%
+          {/* 12,5% */}
         </span>
       </div>
     </div>
