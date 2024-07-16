@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   try {
-    const {uri, lastTen} = req.query
+    const {uri} = req.query
     const SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"];
 
     const env = getEnv();

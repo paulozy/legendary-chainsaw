@@ -1,3 +1,5 @@
+import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import axios from "axios";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { Header } from "./components/Header";
@@ -5,6 +7,7 @@ import { LastTransactionsTable } from "./components/LastTransactionsTable";
 import { Loading } from "./components/Loading";
 import { PieChart } from "./components/PieChart";
 import { ResumeCard } from "./components/ResumeCard";
+import { SpeedDialButton, SpeedDialTypeEnum } from './components/SpeedDial';
 import { TutorModal } from "./components/TutorModal";
 import { Transaction, User } from "./types";
 
@@ -45,12 +48,22 @@ const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> =
 
   if (response.status !== 200) {
     const err = await response.json()
-    return alert(err.error)
+    alert(err.error)
+    return
   }
 
   const { transactions, categories } = await response.json()
 
   return { transactions, categories }
+}
+
+const addNewTransaction = async (transaction: Transaction, spreadsheetURL: string) => {
+  const response = await axios.post('/api/worksheet', {
+    transaction,
+    spreadsheetURL
+  })
+
+  console.log(response)
 }
 
 const Home: NextPage = () => {
@@ -65,7 +78,14 @@ const Home: NextPage = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true)
-    const userObj = { name: userName, spreadsheetURI: spreadsheetURL }
+
+    let userObj = {} as User
+
+    if (!userName || spreadsheetURL) {
+      userObj = JSON.parse(localStorage.getItem('user'))
+    } else {
+      userObj = { name: userName, spreadsheetURI: spreadsheetURL }
+    }
 
     const { transactions, categories } = await fetchTransactions(userObj)
 
@@ -113,6 +133,11 @@ const Home: NextPage = () => {
     return acc + cur.value
   }, 0)
   const balance = receipts - (expenses + invests)
+
+  const actions = [
+    // { icon: <SpeedDialButton type={SpeedDialTypeEnum.ADD} action={handleSubmit} />, name: 'Adicionar' },
+    { icon: <SpeedDialButton type={SpeedDialTypeEnum.UPDATE} action={handleSubmit} />, name: 'Atualizar' },
+  ];
 
   useEffect(() => {
     setIsLoading(true)
@@ -187,6 +212,20 @@ const Home: NextPage = () => {
           </main>
         ) : <TutorModal props={tutorModalProps} />
       }
+
+      <SpeedDial
+        ariaLabel="SpeedDial basic example"
+        sx={{ position: 'absolute', bottom: 30, right: 60 }}
+        icon={<SpeedDialIcon />}
+      >
+        {actions.map((action) => (
+          <SpeedDialAction
+            key={action.name}
+            icon={action.icon}
+            tooltipTitle={action.name}
+          />
+        ))}
+      </SpeedDial>
     </>
   );
 };
