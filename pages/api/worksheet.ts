@@ -45,7 +45,9 @@ export default async function handler(
       if(transaction.type === 'DESPESA') categories.add(transaction.category)
     }
 
-    res.status(200).json({transactions, categories: Array.from(categories)});
+    const json = {transactions, categories: Array.from(categories)}
+
+    res.status(200).json(json);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
