@@ -50,6 +50,7 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
     if (e.target.value.length < 3) {
       setMsgNameError({ error: true, msg: 'O nome deve ter mais de 3 caracteres' })
       setUserName(e.target.value)
+      console.log('e.target.value - name', e.target.value)
     } else {
       setMsgNameError({ error: false, msg: null })
       setUserName(e.target.value)
@@ -59,6 +60,7 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
     if (!isValidGoogleSheetsUrl(e.target.value)) {
       setMsgSpreadsheetURLError({ error: true, msg: 'O link precisa ser de uma planilha do: Google Planilhas' })
       setSpreadsheetURL(e.target.value)
+      console.log('e.target.value - spreadsheeturl', e.target.value)
     } else {
       setMsgSpreadsheetURLError({ error: false, msg: null })
       setSpreadsheetURL(e.target.value)

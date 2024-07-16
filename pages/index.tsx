@@ -1,5 +1,4 @@
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
-import axios from "axios";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { Header } from "../components/Header";
@@ -58,12 +57,12 @@ const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> =
   return { transactions, categories }
 }
 
-const addNewTransaction = async (transaction: Transaction, spreadsheetURL: string) => {
-  const response = await axios.post('/api/worksheet', {
-    transaction,
-    spreadsheetURL
-  })
-}
+// const addNewTransaction = async (transaction: Transaction, spreadsheetURL: string) => {
+//   const response = await axios.post('/api/worksheet', {
+//     transaction,
+//     spreadsheetURL
+//   })
+// }
 
 const Home: NextPage = () => {
   const [user, setUser] = useState<User>(undefined)
@@ -80,7 +79,7 @@ const Home: NextPage = () => {
 
     let userObj = {} as User
 
-    if (!userName || spreadsheetURL) {
+    if (!userName || !spreadsheetURL) {
       userObj = JSON.parse(localStorage.getItem('user'))
     } else {
       userObj = { name: userName, spreadsheetURI: spreadsheetURL }
