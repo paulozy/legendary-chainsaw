@@ -72,7 +72,7 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
 
   return (
     <div className="mt-5">
-      <h2 className="font-bold text-2xl text-center">Aqui é <span className="text-[#155EEF]">TUDO</span> muito <span className="text-[#155EEF]">SIMPLES</span></h2>
+      <h2 className="font-bold text-2xl text-center text-black">Aqui é <span className="text-[#155EEF]">TUDO</span> muito <span className="text-[#155EEF]">SIMPLES</span></h2>
       <p className="text-[16px] text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ídeia dos próximos passos.</p>
 
 
