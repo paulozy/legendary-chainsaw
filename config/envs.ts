@@ -4,7 +4,7 @@ type ENV = {
 };
 
 const env: ENV = {
-  googleAuthPrivateKey: process.env.GOOGLE_AUTH_PRIVATE_KEY,
+  googleAuthPrivateKey: process.env.GOOGLE_AUTH_PRIVATE_KEY.replace(/\\n/g, '\n'),
   googleAuthClientEmail: process.env.GOOGLE_AUTH_CLIENT_MAIL,
 };
 
