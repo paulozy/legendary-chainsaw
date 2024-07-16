@@ -67,7 +67,7 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
     }
   }
 
-  const defaultWorksheetURL = "https://docs.google.com/spreadsheets/d/1T7jK1voBln-v7LxhNXdshJ_Zgp_Ej7ilcMeY3x96Wlg/edit?gid=0#gid=0"
+  const defaultWorksheetURL = "https://docs.google.com/spreadsheets/d/18VHeypfw8WCiqNjldT3koGnjPCZzl3fqGHRw8KBIrvg/edit?gid=0#gid=0"
 
   const backButtonMargin = activeStep === steps.length - 1 ? 0 : 1
   const backButtonVariant = activeStep === steps.length - 1 ? "contained" : "text"

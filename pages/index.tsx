@@ -121,13 +121,13 @@ const Home: NextPage = () => {
     handleSubmit
   }
 
-  const receipts = transactions.filter(({ type }) => type === 'RECEITA').reduce((acc, cur) => {
+  const receipts = transactions.filter(({ type }) => type === 'receita').reduce((acc, cur) => {
     return acc + cur.value
   }, 0)
-  const expenses = transactions.filter(({ type }) => type === 'DESPESA').reduce((acc, cur) => {
+  const expenses = transactions.filter(({ type }) => type === 'despesa').reduce((acc, cur) => {
     return acc + cur.value
   }, 0)
-  const invests = transactions.filter(({ type }) => type === 'INVESTIMENTO').reduce((acc, cur) => {
+  const invests = transactions.filter(({ type }) => type === 'investimento').reduce((acc, cur) => {
     return acc + cur.value
   }, 0)
   const balance = receipts - (expenses + invests)

@@ -66,7 +66,7 @@ const toJSON = (rows: any) => {
 
     return {
       id: crypto.randomUUID(),
-      type: row[0],
+      type: row[0].toLowerCase(),
       description: row[1],
       value: number,
       category: row[3],
