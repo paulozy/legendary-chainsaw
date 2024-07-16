@@ -29,7 +29,7 @@ export default async function handler(
 
     if(defaultSpreadsheetId === spreadsheetId) {
       res.status(403).send({
-        error: 'Não é possivel improtar a planilha modelo'
+        error: 'Não é possivel importar a planilha modelo'
       })
     }
 
