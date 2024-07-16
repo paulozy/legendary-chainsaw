@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
+import { Box, Button, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 import dataAnalysisImage from '../../public/data_analysis.svg';
@@ -98,13 +98,19 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
                     <Typography style={{ fontSize: 13 }}>{step.instructions}</Typography>
                     <Box sx={{ mb: 2 }}>
                       <div className="">
-                        {index === 1 ? <a
-                          className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-colorPrimary css-1f5ro5o-MuiButtonBase-root-MuiButton-root"
-                          href={defaultWorksheetURL}
-                          target="_blank"
-                        >
-                          Planilha
-                        </a> : null}
+                        {index === 1 ?
+                          <Button
+                            variant="contained"
+                            sx={{ mt: 1, mr: 1 }}
+                          >
+                            <a
+                              href={defaultWorksheetURL}
+                              target="_blank"
+                            >
+                              Planilha
+                            </a>
+                          </Button>
+                          : null}
 
                         {index === 0 ? (
                           <div>
@@ -162,14 +168,6 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
                 </Step>
               ))}
             </Stepper>
-            {activeStep === steps.length && (
-              <Paper square elevation={0} sx={{ p: 3 }}>
-                <Typography>All steps completed - you&apos;re finished</Typography>
-                <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-                  Reset
-                </Button>
-              </Paper>
-            )}
           </Box>
         </div>
 

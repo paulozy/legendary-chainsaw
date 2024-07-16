@@ -11,3 +11,9 @@ export type Transaction = {
   value: number;
   date: string;
 }
+
+export const TransactionType = {
+  EXPENSE: 'despesa',
+  INCOME: 'receita',
+  INVEST: 'investimento'
+}

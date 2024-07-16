@@ -8,7 +8,7 @@ import { PieChart } from "../components/PieChart";
 import { ResumeCard } from "../components/ResumeCard";
 import { SpeedDialButton, SpeedDialTypeEnum } from '../components/SpeedDial';
 import { TutorModal } from "../components/TutorModal";
-import { Transaction, User } from "../types";
+import { Transaction, TransactionType, User } from "../types";
 
 const getOptions = (categories: [string]) => {
   return {
@@ -121,13 +121,13 @@ const Home: NextPage = () => {
     handleSubmit
   }
 
-  const receipts = transactions.filter(({ type }) => type === 'receita').reduce((acc, cur) => {
+  const receipts = transactions.filter(({ type }) => type === TransactionType.INCOME).reduce((acc, cur) => {
     return acc + cur.value
   }, 0)
-  const expenses = transactions.filter(({ type }) => type === 'despesa').reduce((acc, cur) => {
+  const expenses = transactions.filter(({ type }) => type === TransactionType.EXPENSE).reduce((acc, cur) => {
     return acc + cur.value
   }, 0)
-  const invests = transactions.filter(({ type }) => type === 'investimento').reduce((acc, cur) => {
+  const invests = transactions.filter(({ type }) => type === TransactionType.INVEST).reduce((acc, cur) => {
     return acc + cur.value
   }, 0)
   const balance = receipts - (expenses + invests)

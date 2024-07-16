@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getEnv } from "../../config/envs";
-import { Transaction } from "../../types";
+import { Transaction, TransactionType } from "../../types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -42,7 +42,7 @@ export default async function handler(
 
     const categories = new Set()
     for(const transaction of transactions) {
-      if(transaction.type === 'DESPESA') categories.add(transaction.category)
+      if(transaction.type === TransactionType.EXPENSE) categories.add(transaction.category)
     }
 
     const json = {transactions, categories: Array.from(categories)}
