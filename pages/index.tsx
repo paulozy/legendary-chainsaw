@@ -2,14 +2,14 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import axios from "axios";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { Header } from "./components/Header";
-import { LastTransactionsTable } from "./components/LastTransactionsTable";
-import { Loading } from "./components/Loading";
-import { PieChart } from "./components/PieChart";
-import { ResumeCard } from "./components/ResumeCard";
-import { SpeedDialButton, SpeedDialTypeEnum } from './components/SpeedDial';
-import { TutorModal } from "./components/TutorModal";
-import { Transaction, User } from "./types";
+import { Header } from "../components/Header";
+import { LastTransactionsTable } from "../components/LastTransactionsTable";
+import { Loading } from "../components/Loading";
+import { PieChart } from "../components/PieChart";
+import { ResumeCard } from "../components/ResumeCard";
+import { SpeedDialButton, SpeedDialTypeEnum } from '../components/SpeedDial';
+import { TutorModal } from "../components/TutorModal";
+import { Transaction, User } from "../types";
 
 const getOptions = (categories: [string]) => {
   return {
@@ -40,6 +40,7 @@ const getOptions = (categories: [string]) => {
 };
 
 type FetchTransactionsReturn = { transactions: Transaction[], categories: [string] }
+type PieChartData = { options: any }
 
 const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> => {
   const uriParam = encodeURIComponent(user.spreadsheetURI);
@@ -62,8 +63,6 @@ const addNewTransaction = async (transaction: Transaction, spreadsheetURL: strin
     transaction,
     spreadsheetURL
   })
-
-  console.log(response)
 }
 
 const Home: NextPage = () => {
@@ -73,7 +72,7 @@ const Home: NextPage = () => {
   const [spreadsheetURL, setSpreadsheetURL] = useState<string>()
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [series, setSeries] = useState<[number]>()
-  const [pieChartData, setPieChartData] = useState()
+  const [pieChartData, setPieChartData] = useState({} as PieChartData)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async () => {

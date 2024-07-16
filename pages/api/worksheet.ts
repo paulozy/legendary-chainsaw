@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getEnv } from "../../config/envs";
-import { Transaction } from "../types";
+import { Transaction } from "../../types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -34,8 +34,8 @@ export default async function handler(
     let transactions: Transaction[] = toJSON(worksheet.data.values)
 
     transactions.sort((a, b) => {
-        const aDate = moment(a.date).unix()
-        const bDate = moment(b.date).unix()
+        const aDate = moment(new Date(a.date)).unix()
+        const bDate = moment(new Date(b.date)).unix()
 
         return aDate - bDate
     }).reverse()

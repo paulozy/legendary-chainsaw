@@ -1,9 +1,8 @@
 import { Box, Button, Paper, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
-import dataAnalysisImage from '../../../public/data_analysis.svg';
-import setupImage from '../../../public/setup1.svg';
-import stepsImage from '../../../public/steps.svg';
+import dataAnalysisImage from '../../public/data_analysis.svg';
+import stepsImage from '../../public/steps.svg';
 
 export function StepContentOne() {
   return (
@@ -185,48 +184,3 @@ type StepContentThreeProps = {
   setSpreadsheetURL: Function
   isValidGoogleSheetsUrl: Function
 }
-
-export function StepContentThree({ userName, setUserName, spreadsheetURL, setSpreadsheetURL, isValidGoogleSheetsUrl }: StepContentThreeProps){
-
-
-  
-
-  return (
-    <div className="mt-5">
-      <h2 className="font-bold text-3xl text-center"><span className="text-[#155EEF]">Último passo, </span>vamos lá!</h2>
-      <p className="text-[16px] text-[#516778] mt-1 text-center">Você está a um passo de tornar seu controle financeiro mais fácil</p>
-
-      <div className="flex items-center">
-        <div className="mt-5 w-[50%]">
-          <div>
-            <label htmlFor="name" className="block font-semibold">Nome:</label>
-            <input
-              onChange={onChangeName}
-              type="text"
-              placeholder="ex: John Doe"
-              id="name"
-              value={userName}
-              className="border-[1px] px-2 py-1 rounded-md border-[#155EEF] mt-[2px] w-full focus:outline-none"
-            />
-            {msgNameError.error ? <span className="text-red-500">{msgNameError.msg}</span> : null}
-          </div>
-
-          <div className="mt-3">
-            <label htmlFor="spreadsheet" className="block font-semibold">Link da planilha:</label>
-            <input
-              onChange={onChangeSpreadsheetURL}
-              type="text"
-              placeholder="Cole aqui o link da sua planilha"
-              id="spreadsheet"
-              value={spreadsheetURL}
-              className="border-[1px] px-2 py-1 rounded-md border-[#155EEF] mt-[2px] w-full focus:outline-none"
-            />
-            {msgSpreadsheetURLError.error ? <span className="text-red-500">{msgSpreadsheetURLError.msg}</span> : null}
-          </div>
-        </div>
-
-        <Image src={setupImage} alt="" height={400} />
-      </div>
-    </div>
-  )
-} 

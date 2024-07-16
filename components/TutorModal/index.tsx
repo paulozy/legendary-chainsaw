@@ -1,5 +1,5 @@
 import { Box, Button, Modal, Step, StepLabel, Stepper } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { StepContentOne, StepContentTwo } from "../StepContent";
 
 const style = {
@@ -22,13 +22,13 @@ type TutorModalProps = {
     isModalOpen: boolean;
     userName: string;
     spreadsheetURL: string;
-    setUserName: Function;
-    setSpreadsheetURL: Function;
-    handleSubmit: Function;
+    setUserName: Dispatch<SetStateAction<string>>
+    setSpreadsheetURL: Dispatch<SetStateAction<string>>
+    handleSubmit: any
   }
 }
 
-export function TutorModal({ props }: TutorModalProps) {
+export const TutorModal = ({ props }: TutorModalProps) => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
