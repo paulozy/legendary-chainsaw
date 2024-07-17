@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppContext } from "../../../pages/contexts/AppContext";
+import { AppContext } from "../../contexts/AppContext";
 
 export function Header() {
   const { user } = useContext(AppContext)

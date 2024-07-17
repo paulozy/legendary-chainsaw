@@ -8,9 +8,9 @@ import { NewTransactionModal } from "../src/components/NewTransactionModal";
 import { PieChart } from "../src/components/PieChart";
 import { SpeedDialButton, SpeedDialTypeEnum } from '../src/components/SpeedDial';
 import { TutorModal } from "../src/components/TutorModal";
+import { AppContext } from "../src/contexts/AppContext";
 import { ResumeCardGroup } from "../src/ResumeCardGroup";
 import { User } from "../src/types";
-import { AppContext } from "./contexts/AppContext";
 
 const Home: NextPage = () => {
   const {

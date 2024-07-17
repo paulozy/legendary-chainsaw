@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { AppContext } from "../../pages/contexts/AppContext";
 import { ResumeCard } from "../components/ResumeCard";
+import { AppContext } from "../contexts/AppContext";
 import { TransactionType } from "../types";
 
 export function ResumeCardGroup() {

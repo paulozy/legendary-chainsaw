@@ -1,6 +1,6 @@
 import { Box, Button, Modal, Step, StepLabel, Stepper } from "@mui/material";
 import { useContext, useState } from "react";
-import { AppContext } from "../../../pages/contexts/AppContext";
+import { AppContext } from "../../contexts/AppContext";
 import { StepContentOne, StepContentTwo } from "../StepContent";
 
 export const modalDefaultStyle = {

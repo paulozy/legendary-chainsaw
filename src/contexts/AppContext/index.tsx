@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
-import { api } from '../../../src/services/axios';
-import { Transaction, User } from '../../../src/types';
+import { api } from '../../services/axios';
+import { Transaction, User } from '../../types';
 
 type AppContextProps = {
   user: User,
@@ -11,7 +11,7 @@ type AppContextProps = {
   setIsLoading: Function,
   transactions: Transaction[],
   setTransactions: Function,
-  categories: [string],
+  categories: string[],
   setCategories: Function,
   series: [number],
   setSeries: Function,
@@ -41,7 +41,7 @@ const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> =
     .catch(err => {
       console.log('pqp', err)
       alert(err.error)
-    })
+    }) as any
 
   const { transactions, categories } = response.data
 

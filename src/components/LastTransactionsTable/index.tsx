@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useContext } from "react";
-import { AppContext } from "../../../pages/contexts/AppContext";
+import { AppContext } from "../../contexts/AppContext";
 
 export function LastTransactionsTable() {
   const { transactions } = useContext(AppContext)

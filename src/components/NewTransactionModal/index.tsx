@@ -1,8 +1,8 @@
 import { Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Snackbar, TextField } from "@mui/material";
 import Image from "next/image";
 import { useContext, useState } from "react";
-import { AppContext } from "../../../pages/contexts/AppContext";
 import addNewImage from "../../../public/add_new.svg";
+import { AppContext } from "../../contexts/AppContext";
 import { api } from "../../services/axios";
 import { TransactionType } from "../../types";
 

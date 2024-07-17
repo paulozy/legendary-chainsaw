@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useContext } from "react";
-import { AppContext } from "../../../pages/contexts/AppContext";
+import { AppContext } from "../../contexts/AppContext";
 
 // Dynamically import ApexCharts only on the client side
 const Chart = dynamic(() => import("react-apexcharts"), {

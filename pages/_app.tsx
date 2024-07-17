@@ -1,8 +1,8 @@
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { AppProps } from 'next/app'
+import { AppProvider } from "../src/contexts/AppContext"
 import '../src/styles/globals.css'
-import { AppProvider } from "./contexts/AppContext"
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
