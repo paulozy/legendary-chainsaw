@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Snackbar, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, createFilterOptions, FormControl, InputAdornment, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Snackbar, TextField } from "@mui/material";
 import Image from "next/image";
 import { useContext, useState } from "react";
 import addNewImage from "../../../public/add_new.svg";
@@ -9,6 +9,8 @@ import { TransactionType } from "../../types";
 type NewTransactionModalProps = {
   handleSubmitImport: Function
 }
+
+const filter = createFilterOptions();
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -25,7 +27,7 @@ const style = {
 export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalProps) {
   const {
     user,
-    categories,
+    transactions,
     setIsNewTransactionModalOpen,
     isNewTransactionModalOpen,
     isToastOpen,
@@ -34,7 +36,7 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
 
   const [type, setType] = useState(TransactionType.EXPENSE)
   const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState(null)
   const [amount, setAmount] = useState(0)
 
   const handleChangeType = (event: SelectChangeEvent) => {
@@ -43,8 +45,19 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
   const handleChangeDescription = (event) => {
     setDescription(event.target.value);
   };
-  const handleChangeCategory = (event: SelectChangeEvent) => {
-    setCategory(event.target.value);
+  const handleChangeCategory = (_, newValue) => {
+    if (typeof newValue === 'string') {
+      setCategory({
+        title: newValue,
+      });
+    } else if (newValue && newValue.inputValue) {
+      // Create a new value from the user input
+      setCategory({
+        title: newValue.inputValue,
+      });
+    } else {
+      setCategory(newValue);
+    }
   };
   const handleChangeAmount = (event) => {
     setAmount(event.target.value);
@@ -52,11 +65,13 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
   const isDisabled = (description === "" || category === "" || amount < 1) ? true : false
 
   const handleSubmit = async () => {
+    const categoryFinded = categories.find((ctg: { title: string }) => ctg.title.toLowerCase() === category.title)
+
     const transaction = {
       type: type.toUpperCase(),
       description,
       value: amount,
-      category: categories.find(ctg => ctg.toLowerCase() === category),
+      category: categoryFinded ? categoryFinded : category.title,
       date: new Date().toISOString().split('T')[0]
     }
 
@@ -76,11 +91,43 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
 
     return
   }
+  const handleOptionalLabel = (option) => {
+    if (typeof option === 'string') {
+      return option
+    }
+    if (option.inputValue) {
+      return option.inputValue;
+    }
+    return option.title
+  }
+  const handleFilter = (options, params) => {
+    const filtered = filter(options, params);
+
+    const { inputValue } = params;
+    // Suggest the creation of a new value
+    const isExisting = options.some((option) => inputValue === option.title);
+    if (inputValue !== '' && !isExisting) {
+      filtered.push({
+        inputValue,
+        title: `Adicionar "${inputValue}"`,
+      });
+    }
+
+    return filtered;
+  }
+
+  const categoriesSet = new Set()
+  for (const transaction of transactions) {
+    if (transaction) categoriesSet.add(transaction.category)
+  }
+
+  const categories = Array.from(categoriesSet).map(e => ({ title: e }))
 
   return (
     <>
       <Modal
         open={isNewTransactionModalOpen}
+        onClose={() => setIsNewTransactionModalOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -124,20 +171,30 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
 
               <div className="mt-5 flex justify-between items-center gap-3">
                 <FormControl sx={{ minWidth: 120, width: '100%' }} size="small">
-                  <InputLabel htmlFor="category-input">Categoria</InputLabel>
-                  <Select
-                    labelId="category-input"
-                    id="demo-select-small"
+                  <Autocomplete
+                    size="small"
+                    disablePortal
+                    selectOnFocus
+                    clearOnBlur
+                    handleHomeEndKeys
+                    freeSolo
+                    id="free-solo-with-text-demo"
                     value={category}
-                    label="Categoria"
                     onChange={handleChangeCategory}
-                  >
-                    {categories.sort().map((ctg, i) => (
-                      <MenuItem value={ctg.toLowerCase()} key={i}>{ctg}</MenuItem>
-                    ))}
-                  </Select>
+                    options={categories.sort()}
+                    renderInput={(params) => <TextField {...params} label="Categoria" />}
+                    getOptionLabel={handleOptionalLabel}
+                    filterOptions={handleFilter}
+                    renderOption={(props, option) => {
+                      const { key, ...optionProps } = props;
+                      return (
+                        <li key={key} {...optionProps}>
+                          {option.title}
+                        </li>
+                      );
+                    }}
+                  />
                 </FormControl>
-
 
                 <TextField
                   size="small"
