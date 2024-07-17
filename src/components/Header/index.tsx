@@ -1,17 +1,16 @@
-import { User } from "../../types";
+import { useContext } from "react";
+import { AppContext } from "../../contexts/AppContext";
 
-type HeaderProps = {
-  user: User
-}
+export function Header() {
+  const { user } = useContext(AppContext)
 
-export function Header({ user }: HeaderProps) {
   const normalizedName = user.name.toLowerCase().replace(/\w\S*/g, (word) => {
     return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
   })
 
   return (
     <header className="flex justify-between items-center">
-      <h1 className="text-3xl">Olá, {normalizedName}!</h1>
+      <h1 className="text-3xl font-semibold">Olá, {normalizedName}!</h1>
 
 
       {/* <div className="flex justify-center items-center gap-3">

@@ -1,4 +1,6 @@
-import { Box, CircularProgress, Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
+import Lottie from 'react-lottie';
+import loadingLottie from '../../lotties/finances_loading.json';
 
 type LoadingProps = {
   isModalOpen: boolean
@@ -21,6 +23,15 @@ const style = {
   outline: 'none'
 };
 
+const defaultLottieOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: loadingLottie,
+  rendererSettings: {
+    preserveAspectRatio: "xMidYMid slice"
+  }
+}
+
 export function Loading({ isModalOpen }: LoadingProps) {
   return (
     <Modal
@@ -29,8 +40,13 @@ export function Loading({ isModalOpen }: LoadingProps) {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <CircularProgress />
-        <p>Carregando Informações</p>
+        <h2 className="text-2xl font-semibold">Carregando Informações</h2>
+
+        <Lottie
+          options={defaultLottieOptions}
+          height={250}
+          width={400}
+        />
       </Box>
     </Modal>
   );

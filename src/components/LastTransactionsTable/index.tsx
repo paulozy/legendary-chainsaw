@@ -7,15 +7,11 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { Transaction } from "../../types";
+import { useContext } from "react";
+import { AppContext } from "../../contexts/AppContext";
 
-type LastTransactionsTableProps = {
-  transactions: Transaction[];
-};
-
-export function LastTransactionsTable({
-  transactions,
-}: LastTransactionsTableProps) {
+export function LastTransactionsTable() {
+  const { transactions } = useContext(AppContext)
 
   function formatCurrency(value: number, locale = 'pt-BR', currency = 'BRL') {
     const formatter = new Intl.NumberFormat(locale, {
@@ -56,7 +52,7 @@ export function LastTransactionsTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {transactions.map((row) => (
+            {transactions.slice(0, 5).map((row) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
