@@ -53,16 +53,15 @@ const toJSON = (rows: any) => {
 
   const json = rows.map((row: any) => {
     let number = row[2].replace(/[^\d,.-]/g, '');
-    number.replace(',', '.');
-    number = number.replace(/\./g, '');
-
-    number = parseFloat(number);
+    const noThousands = number.replace(/\./g, '');
+    const normalizedNumber = noThousands.replace(/,/g, '.');
+    const value = parseFloat(normalizedNumber);
 
     return {
       id: crypto.randomUUID(),
       type: row[0].toLowerCase(),
       description: row[1],
-      value: number,
+      value,
       category: row[3],
       date: row[4],
     };
