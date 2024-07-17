@@ -11,6 +11,8 @@ type AppContextProps = {
   setIsLoading: Function,
   transactions: Transaction[],
   setTransactions: Function,
+  categories: [string],
+  setCategories: Function,
   series: [number],
   setSeries: Function,
   pieChartData: PieChartData,
@@ -19,6 +21,10 @@ type AppContextProps = {
   setUserName: Function,
   spreadsheetURL: string,
   setSpreadsheetURL: Function,
+  isNewTransactionModalOpen: boolean,
+  setIsNewTransactionModalOpen: Function
+  isToastOpen: boolean,
+  setIsToastOpen: Function,
   fetchTransactions: Function,
   getOptions: Function
 }
@@ -73,12 +79,15 @@ const getOptions = (categories: [string]) => {
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState<User>(undefined)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false)
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [categories, setCategories] = useState([])
   const [series, setSeries] = useState<[number]>()
   const [pieChartData, setPieChartData] = useState({} as PieChartData)
   const [isLoading, setIsLoading] = useState(false)
   const [userName, setUserName] = useState<string>()
   const [spreadsheetURL, setSpreadsheetURL] = useState<string>()
+  const [isToastOpen, setIsToastOpen] = useState(false)
 
   useEffect(() => {
     setIsLoading(true)
@@ -121,6 +130,7 @@ export const AppProvider = ({ children }) => {
 
       setUser(parsedUser)
       setTransactions(transactions)
+      setCategories(categories)
       setSeries(series as any)
       setPieChartData(getOptions(categories) as any)
       setIsLoading(false)
@@ -137,6 +147,8 @@ export const AppProvider = ({ children }) => {
     setIsLoading,
     transactions,
     setTransactions,
+    categories,
+    setCategories,
     series,
     setSeries,
     pieChartData,
@@ -145,6 +157,10 @@ export const AppProvider = ({ children }) => {
     setUserName,
     spreadsheetURL,
     setSpreadsheetURL,
+    isNewTransactionModalOpen,
+    setIsNewTransactionModalOpen,
+    isToastOpen,
+    setIsToastOpen,
     fetchTransactions,
     getOptions
   }

@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { AppContext } from "../../../pages/contexts/AppContext";
 import { StepContentOne, StepContentTwo } from "../StepContent";
 
-const style = {
+export const modalDefaultStyle = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -42,7 +42,7 @@ export const TutorModal = ({ handleSubmit }: TutorModalProps) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
+      <Box sx={modalDefaultStyle}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};

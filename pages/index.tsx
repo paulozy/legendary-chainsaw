@@ -4,11 +4,11 @@ import { useContext } from "react";
 import { Header } from "../src/components/Header";
 import { LastTransactionsTable } from "../src/components/LastTransactionsTable";
 import { Loading } from "../src/components/Loading";
+import { NewTransactionModal } from "../src/components/NewTransactionModal";
 import { PieChart } from "../src/components/PieChart";
 import { SpeedDialButton, SpeedDialTypeEnum } from '../src/components/SpeedDial';
 import { TutorModal } from "../src/components/TutorModal";
 import { ResumeCardGroup } from "../src/ResumeCardGroup";
-import { api } from "../src/services/axios";
 import { User } from "../src/types";
 import { AppContext } from "./contexts/AppContext";
 
@@ -19,14 +19,17 @@ const Home: NextPage = () => {
     userName,
     spreadsheetURL,
     setIsModalOpen,
+    isNewTransactionModalOpen,
+    setIsNewTransactionModalOpen,
     isLoading,
     setIsLoading,
-    transactions,
     setTransactions,
     setSeries,
     setPieChartData,
+    setIsToastOpen,
+    setCategories,
     fetchTransactions,
-    getOptions
+    getOptions,
   } = useContext(AppContext)
 
   const handleSubmitImport = async () => {
@@ -59,6 +62,8 @@ const Home: NextPage = () => {
       const series = Object.entries(totalsPerCategory).map(([_, total]) => (total));
 
       setTransactions(transactions)
+      setCategories(categories)
+      setIsToastOpen(true)
       setIsModalOpen(false)
       setUser(userObj)
       setSeries(series as any)
@@ -72,34 +77,15 @@ const Home: NextPage = () => {
     }
   }
 
-  const addNewTransaction = async () => {
-    const transaction = {
-      id: crypto.randomUUID(),
-      type: 'DESPESA',
-      description: 'Teste insert',
-      value: 200,
-      category: 'Vestuário',
-      date: '16/07/2024'
-    }
-
-    await api.post('transactions/add', {
-      transaction,
-      spreadsheetUrl: user.spreadsheetURI
-    }, { timeout: 3000 })
-      .catch(err => alert(err))
-
-    alert('adicionado com sucesso')
-    return
-  }
-
   const actions = [
-    { icon: <SpeedDialButton type={SpeedDialTypeEnum.ADD} action={addNewTransaction} />, name: 'Adicionar' },
+    { icon: <SpeedDialButton type={SpeedDialTypeEnum.ADD} action={() => setIsNewTransactionModalOpen(true)} />, name: 'Adicionar' },
     { icon: <SpeedDialButton type={SpeedDialTypeEnum.UPDATE} action={handleSubmitImport} />, name: 'Atualizar' },
   ];
 
   return (
     <>
       {isLoading ? <Loading isModalOpen={isLoading} /> : null}
+      {isNewTransactionModalOpen ? <NewTransactionModal handleSubmitImport={handleSubmitImport} /> : null}
 
       {
         user
