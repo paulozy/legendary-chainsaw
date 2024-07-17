@@ -1,5 +1,6 @@
 import { Box, Button, Modal, Step, StepLabel, Stepper } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useContext, useState } from "react";
+import { AppContext } from "../../../pages/contexts/AppContext";
 import { StepContentOne, StepContentTwo } from "../StepContent";
 
 const style = {
@@ -18,17 +19,18 @@ const style = {
 const steps = ['Seja bem-vindo(a)', 'Como funciona?'];
 
 type TutorModalProps = {
-  props: {
-    isModalOpen: boolean;
-    userName: string;
-    spreadsheetURL: string;
-    setUserName: Dispatch<SetStateAction<string>>
-    setSpreadsheetURL: Dispatch<SetStateAction<string>>
-    handleSubmit: any
-  }
+  handleSubmit: any
 }
 
-export const TutorModal = ({ props }: TutorModalProps) => {
+export const TutorModal = ({ handleSubmit }: TutorModalProps) => {
+  const {
+    isModalOpen,
+    userName,
+    setUserName,
+    spreadsheetURL,
+    setSpreadsheetURL
+  } = useContext(AppContext)
+
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -36,7 +38,7 @@ export const TutorModal = ({ props }: TutorModalProps) => {
 
   return (
     <Modal
-      open={props.isModalOpen}
+      open={isModalOpen}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -58,10 +60,10 @@ export const TutorModal = ({ props }: TutorModalProps) => {
                 ? <StepContentOne />
                 :
                 <StepContentTwo
-                  setUserName={props.setUserName}
-                  userName={props.userName}
-                  setSpreadsheetURL={props.setSpreadsheetURL}
-                  spreadsheetURL={props.spreadsheetURL}
+                  setUserName={setUserName}
+                  userName={userName}
+                  setSpreadsheetURL={setSpreadsheetURL}
+                  spreadsheetURL={spreadsheetURL}
                   isValidGoogleSheetsUrl={isValidGoogleSheetsUrl}
                 />
             }
@@ -79,8 +81,8 @@ export const TutorModal = ({ props }: TutorModalProps) => {
               {activeStep === steps.length - 1
                 ? (
                   <Button
-                    onClick={props.handleSubmit}
-                    disabled={!props.userName || props.userName.length < 3 || !props.spreadsheetURL || !isValidGoogleSheetsUrl(props.spreadsheetURL)}
+                    onClick={handleSubmit}
+                    disabled={!userName || userName.length < 3 || !spreadsheetURL || !isValidGoogleSheetsUrl(spreadsheetURL)}
                   >
                     Finalizar
                   </Button>
