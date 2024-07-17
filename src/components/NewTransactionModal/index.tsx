@@ -60,8 +60,6 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
       date: new Date().toISOString().split('T')[0]
     }
 
-    console.log('transaction', transaction)
-
     await api.post('transactions/add', {
       transaction,
       spreadsheetUrl: user.spreadsheetURI
@@ -90,6 +88,8 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
           sx={style}
         >
           <h1 className="mb-3 text-xl font-semibold">Adicionar um novo registro</h1>
+          <p>Lembre-se de compartilhar a planilha no modo "Leitor", caso contrário não será possível adicionar os dados</p>
+
           <div className="flex flex-col justify-center items-center">
             <Image src={addNewImage} alt="" width={300} />
 

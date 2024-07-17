@@ -16,7 +16,7 @@ export default async function handler(
 
     if (defaultSpreadsheetId === spreadsheetId) {
       res.status(403).send({
-        error: 'Não é possivel importar a planilha modelo'
+        error: 'Não é possível importar a planilha modelo'
       })
     }
 
