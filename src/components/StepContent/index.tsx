@@ -1,8 +1,8 @@
 import { Box, Button, Step, StepContent, StepLabel, Stepper, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
-import dataAnalysisImage from '../../public/data_analysis.svg';
-import stepsImage from '../../public/steps.svg';
+import dataAnalysisImage from '../../../public/data_analysis.svg';
+import stepsImage from '../../../public/steps.svg';
 
 export function StepContentOne() {
   return (

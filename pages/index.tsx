@@ -8,6 +8,7 @@ import { PieChart } from "../src/components/PieChart";
 import { ResumeCard } from "../src/components/ResumeCard";
 import { SpeedDialButton, SpeedDialTypeEnum } from '../src/components/SpeedDial';
 import { TutorModal } from "../src/components/TutorModal";
+import { api } from "../src/services/axios";
 import { Transaction, TransactionType, User } from "../src/types";
 
 const getOptions = (categories: [string]) => {
@@ -44,25 +45,16 @@ type PieChartData = { options: any }
 const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> => {
   const uriParam = encodeURIComponent(user.spreadsheetURI);
 
-  const response = await fetch(`/api/worksheet?uri=${uriParam}`)
+  const response = await api.get(`transactions?uri=${uriParam}`)
+    .catch(err => {
+      console.log('pqp', err)
+      alert(err.error)
+    })
 
-  if (response.status !== 200) {
-    const err = await response.json()
-    alert(err.error)
-    return
-  }
-
-  const { transactions, categories } = await response.json()
+  const { transactions, categories } = response.data
 
   return { transactions, categories }
 }
-
-// const addNewTransaction = async (transaction: Transaction, spreadsheetURL: string) => {
-//   const response = await axios.post('/api/worksheet', {
-//     transaction,
-//     spreadsheetURL
-//   })
-// }
 
 const Home: NextPage = () => {
   const [user, setUser] = useState<User>(undefined)
@@ -74,7 +66,7 @@ const Home: NextPage = () => {
   const [pieChartData, setPieChartData] = useState({} as PieChartData)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = async () => {
+  const handleSubmitImport = async () => {
     try {
       setIsLoading(true)
 
@@ -116,13 +108,35 @@ const Home: NextPage = () => {
     }
   }
 
+  const addNewTransaction = async () => {
+
+    const transaction = {
+      id: crypto.randomUUID(),
+      type: 'DESPESA',
+      description: 'Teste insert',
+      value: 200,
+      category: 'Vestuário',
+      date: '16/07/2024'
+    }
+
+    await api.post('transactions/add', {
+      transaction,
+      spreadsheetUrl: user.spreadsheetURI
+    }, { timeout: 3000 })
+      .catch(err => alert(err))
+
+    alert('adicionado com sucesso')
+
+    return
+  }
+
   const tutorModalProps = {
     isModalOpen,
     userName,
     spreadsheetURL,
     setUserName,
     setSpreadsheetURL,
-    handleSubmit
+    handleSubmit: handleSubmitImport
   }
 
   const receipts = transactions.filter(({ type }) => type === TransactionType.INCOME).reduce((acc, cur) => {
@@ -137,8 +151,8 @@ const Home: NextPage = () => {
   const balance = receipts - (expenses + invests)
 
   const actions = [
-    // { icon: <SpeedDialButton type={SpeedDialTypeEnum.ADD} action={handleSubmit} />, name: 'Adicionar' },
-    { icon: <SpeedDialButton type={SpeedDialTypeEnum.UPDATE} action={handleSubmit} />, name: 'Atualizar' },
+    { icon: <SpeedDialButton type={SpeedDialTypeEnum.ADD} action={addNewTransaction} />, name: 'Adicionar' },
+    { icon: <SpeedDialButton type={SpeedDialTypeEnum.UPDATE} action={handleSubmitImport} />, name: 'Atualizar' },
   ];
 
   useEffect(() => {
@@ -157,7 +171,7 @@ const Home: NextPage = () => {
       const uriParam = encodeURIComponent(parsedUser.spreadsheetURI);
       const lastTenParam = encodeURIComponent('true');
 
-      const response = await fetch(`/api/worksheet?uri=${uriParam}&lastTen=${lastTenParam}`)
+      const response = await fetch(`/api/transactions?uri=${uriParam}&lastTen=${lastTenParam}`)
 
       if (response.status !== 200) {
         const err = await response.json()

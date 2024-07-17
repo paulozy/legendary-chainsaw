@@ -1,6 +1,5 @@
 import PlusIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
-import { MouseEventHandler } from 'react';
 
 export enum SpeedDialTypeEnum {
   ADD = 'add',
@@ -9,7 +8,7 @@ export enum SpeedDialTypeEnum {
 
 type SpeedDialButtonProps = {
   type: SpeedDialTypeEnum
-  action: MouseEventHandler
+  action: any
 }
 
 const children = {

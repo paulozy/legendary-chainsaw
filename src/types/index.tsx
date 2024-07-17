@@ -4,7 +4,7 @@ export type User = {
 }
 
 export type Transaction = {
-  id: number;
+  id: string;
   description: string;
   type: string;
   category: string;
