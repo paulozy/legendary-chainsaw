@@ -23,6 +23,10 @@ export function LastTransactionsTable() {
     return formatter.format(value);
   }
 
+  function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+
   return (
     <div className="flex-1 bg-white rounded-xl overflow-hidden">
       <div className="p-6">
@@ -58,13 +62,13 @@ export function LastTransactionsTable() {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row" className="px-6">
-                  {row.description}
+                  {capitalizeFirstLetter(row.description)}
                 </TableCell>
                 <TableCell className="px-6" align="left">
-                  {row.type}
+                  {capitalizeFirstLetter(row.type)}
                 </TableCell>
                 <TableCell className="px-6" align="left">
-                  {row.category}
+                  {capitalizeFirstLetter(row.category)}
                 </TableCell>
                 <TableCell className="px-6" align="left">
                   {formatCurrency(row.value)}
