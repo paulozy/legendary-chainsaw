@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import moment from 'moment';
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getEnv } from "../../config/envs";
-import { Transaction, TransactionType } from "../../types";
+import { Transaction, TransactionType } from "../../src/types";
 
 export default async function handler(
   req: NextApiRequest,

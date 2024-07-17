@@ -15,7 +15,7 @@ const style = {
   outline: 'none'
 }
 
-const steps = ['Seja bem vindo(a)', 'Como funcina?'];
+const steps = ['Seja bem-vindo(a)', 'Como funcina?'];
 
 type TutorModalProps = {
   props: {

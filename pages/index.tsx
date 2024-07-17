@@ -1,14 +1,14 @@
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { Header } from "../components/Header";
-import { LastTransactionsTable } from "../components/LastTransactionsTable";
-import { Loading } from "../components/Loading";
-import { PieChart } from "../components/PieChart";
-import { ResumeCard } from "../components/ResumeCard";
-import { SpeedDialButton, SpeedDialTypeEnum } from '../components/SpeedDial';
-import { TutorModal } from "../components/TutorModal";
-import { Transaction, TransactionType, User } from "../types";
+import { Header } from "../src/components/Header";
+import { LastTransactionsTable } from "../src/components/LastTransactionsTable";
+import { Loading } from "../src/components/Loading";
+import { PieChart } from "../src/components/PieChart";
+import { ResumeCard } from "../src/components/ResumeCard";
+import { SpeedDialButton, SpeedDialTypeEnum } from '../src/components/SpeedDial';
+import { TutorModal } from "../src/components/TutorModal";
+import { Transaction, TransactionType, User } from "../src/types";
 
 const getOptions = (categories: [string]) => {
   return {

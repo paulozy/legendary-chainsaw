@@ -7,7 +7,7 @@ import stepsImage from '../../public/steps.svg';
 export function StepContentOne() {
   return (
     <div className="mt-5 flex flex-col justify-center text-center items-center">
-      <h2 className="font-bold text-3xl">Seja bem vindo ao <span className="text-[#155EEF]">Resumos Financeiros</span></h2>
+      <h2 className="font-bold text-3xl">Seja bem-vindo(a) ao <span className="text-[#155EEF]">Resumos Financeiros</span></h2>
       <p className="text-[16px] text-[#516778] mt-1">Um aplicativo criado para visualizar a sua vida financeira de forma simples, fácil e rápido</p>
 
       <Image src={dataAnalysisImage} alt="" width={700} />
@@ -75,7 +75,7 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
   return (
     <div className="mt-5">
       <h2 className="font-bold text-2xl text-center text-black">Aqui é <span className="text-[#155EEF]">TUDO</span> muito <span className="text-[#155EEF]">SIMPLES</span></h2>
-      <p className="text-[16px] text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ídeia dos próximos passos.</p>
+      <p className="text-[16px] text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ideia dos próximos passos.</p>
 
 
       <div className="flex justify-center items-center">
