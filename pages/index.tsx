@@ -5,11 +5,11 @@ import { Header } from "../src/components/Header";
 import { LastTransactionsTable } from "../src/components/LastTransactionsTable";
 import { Loading } from "../src/components/Loading";
 import { PieChart } from "../src/components/PieChart";
-import { ResumeCard } from "../src/components/ResumeCard";
 import { SpeedDialButton, SpeedDialTypeEnum } from '../src/components/SpeedDial';
 import { TutorModal } from "../src/components/TutorModal";
+import { ResumeCardGroup } from "../src/ResumeCardGroup";
 import { api } from "../src/services/axios";
-import { TransactionType, User } from "../src/types";
+import { User } from "../src/types";
 import { AppContext } from "./contexts/AppContext";
 
 const Home: NextPage = () => {
@@ -92,17 +92,6 @@ const Home: NextPage = () => {
     return
   }
 
-  const receipts = transactions.filter(({ type }) => type === TransactionType.INCOME).reduce((acc, cur) => {
-    return acc + cur.value
-  }, 0)
-  const expenses = transactions.filter(({ type }) => type === TransactionType.EXPENSE).reduce((acc, cur) => {
-    return acc + cur.value
-  }, 0)
-  const invests = transactions.filter(({ type }) => type === TransactionType.INVEST).reduce((acc, cur) => {
-    return acc + cur.value
-  }, 0)
-  const balance = receipts - (expenses + invests)
-
   const actions = [
     { icon: <SpeedDialButton type={SpeedDialTypeEnum.ADD} action={addNewTransaction} />, name: 'Adicionar' },
     { icon: <SpeedDialButton type={SpeedDialTypeEnum.UPDATE} action={handleSubmitImport} />, name: 'Atualizar' },
@@ -112,39 +101,35 @@ const Home: NextPage = () => {
     <>
       {isLoading ? <Loading isModalOpen={isLoading} /> : null}
 
-      {user ? (
-        <main className="h-lvh px-64 py-6 bg-[#eff4fa]">
-          <Header />
+      {
+        user
+          ? (<main className="h-lvh px-64 py-6 bg-[#eff4fa]">
+            <Header />
 
-          {/* cards */}
-          <section className="w-full grid grid-cols-4 gap-8 mt-10">
-            <ResumeCard isBalance={true} title="Balanço" amount={balance} variation={10} />
-            <ResumeCard title="Receitas" amount={receipts} variation={12} />
-            <ResumeCard title="Despesas" amount={expenses} variation={-1} />
-            <ResumeCard title="Investimentos" amount={invests} variation={20} />
-          </section>
+            {/* cards */}
+            <ResumeCardGroup />
 
-          {/* chart and table */}
-          <section className="flex gap-8 mt-8">
-            <PieChart />
-            <LastTransactionsTable />
-          </section>
+            {/* chart and table */}
+            <section className="flex gap-8 mt-8">
+              <PieChart />
+              <LastTransactionsTable />
+            </section>
 
-          <SpeedDial
-            ariaLabel="SpeedDial basic example"
-            sx={{ position: 'absolute', bottom: 30, right: 60 }}
-            icon={<SpeedDialIcon />}
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-              />
-            ))}
-          </SpeedDial>
-        </main>
-      ) : <TutorModal handleSubmit={handleSubmitImport} />
+            <SpeedDial
+              ariaLabel="SpeedDial basic example"
+              sx={{ position: 'absolute', bottom: 30, right: 60 }}
+              icon={<SpeedDialIcon />}
+            >
+              {actions.map((action) => (
+                <SpeedDialAction
+                  key={action.name}
+                  icon={action.icon}
+                  tooltipTitle={action.name}
+                />
+              ))}
+            </SpeedDial>
+          </main>)
+          : <TutorModal handleSubmit={handleSubmitImport} />
       }
     </>
   );
