@@ -39,7 +39,6 @@ const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> =
 
   const response = await api.get(`transactions?uri=${uriParam}`)
     .catch(err => {
-      console.log('pqp', err)
       alert(err.error)
     }) as any
 
