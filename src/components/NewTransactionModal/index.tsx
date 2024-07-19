@@ -37,7 +37,7 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
   const [type, setType] = useState(TransactionType.EXPENSE)
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState(null)
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState('')
 
   const handleChangeType = (event: SelectChangeEvent) => {
     setType(event.target.value);
@@ -62,7 +62,7 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
   const handleChangeAmount = (event) => {
     setAmount(event.target.value);
   };
-  const isDisabled = (description === "" || category === "" || amount < 1) ? true : false
+  const isDisabled = (description === "" || category === "" || parseFloat(amount) < 1) ? true : false
 
   const handleSubmit = async () => {
     const categoryFinded = categories.find((ctg: { title: string }) => ctg.title.toLowerCase() === category.title)
@@ -70,7 +70,7 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
     const transaction = {
       type: type.toUpperCase(),
       description,
-      value: amount,
+      value: parseFloat(amount),
       category: categoryFinded ? categoryFinded : category.title,
       date: new Date().toISOString().split('T')[0]
     }
