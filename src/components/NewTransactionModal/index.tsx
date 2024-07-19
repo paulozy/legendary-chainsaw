@@ -85,7 +85,7 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
     setType(TransactionType.EXPENSE)
     setDescription('')
     setCategory('')
-    setAmount(0)
+    setAmount('')
 
     await handleSubmitImport()
 
