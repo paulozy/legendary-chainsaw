@@ -55,16 +55,6 @@ const getOptions = (categories: [string]) => {
       legend: {
         position: "bottom" as const,
       },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-          },
-        },
-      ],
       tooltip: {
         y: {
           formatter: function (value) {

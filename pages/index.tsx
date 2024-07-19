@@ -2,6 +2,7 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import { NextPage } from "next";
 import { useContext } from "react";
 import { Header } from "../src/components/Header";
+import { useWindowSize } from "../src/components/hooks/useWindowSize";
 import { LastTransactionsTable } from "../src/components/LastTransactionsTable";
 import { Loading } from "../src/components/Loading";
 import { NewTransactionModal } from "../src/components/NewTransactionModal";
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
     fetchTransactions,
     getOptions,
   } = useContext(AppContext)
+  const { width: windowWidth } = useWindowSize()
 
   const handleSubmitImport = async () => {
     try {
@@ -82,6 +84,10 @@ const Home: NextPage = () => {
     { icon: <SpeedDialButton type={SpeedDialTypeEnum.UPDATE} action={handleSubmitImport} />, name: 'Atualizar' },
   ];
 
+  const speedDialSxBasedOnScreenWidth = windowWidth < 430
+    ? { position: 'absolute', bottom: -150, right: 10 }
+    : { position: 'absolute', bottom: 30, right: 60 }
+
   return (
     <>
       {isLoading ? <Loading isModalOpen={isLoading} /> : null}
@@ -89,21 +95,21 @@ const Home: NextPage = () => {
 
       {
         user
-          ? (<main className="h-lvh px-64 py-6 bg-[#eff4fa]">
+          ? (<main className="h-lvh px-3 py-3 bg-[#eff4fa] sm:px-64 sm:py-6">
             <Header />
 
             {/* cards */}
             <ResumeCardGroup />
 
             {/* chart and table */}
-            <section className="flex gap-8 mt-8">
+            <section className=" w-full mt-5 drop-shadow-md sm:flex sm:gap-8 sm:mt-8">
               <PieChart />
               <LastTransactionsTable />
             </section>
 
             <SpeedDial
               ariaLabel="SpeedDial basic example"
-              sx={{ position: 'absolute', bottom: 30, right: 60 }}
+              sx={speedDialSxBasedOnScreenWidth}
               icon={<SpeedDialIcon />}
             >
               {actions.map((action) => (
@@ -117,6 +123,8 @@ const Home: NextPage = () => {
           </main>)
           : <TutorModal handleSubmit={handleSubmitImport} />
       }
+
+
     </>
   );
 };
