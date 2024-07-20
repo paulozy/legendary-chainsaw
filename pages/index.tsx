@@ -123,8 +123,6 @@ const Home: NextPage = () => {
           </main>)
           : <TutorModal handleSubmit={handleSubmitImport} />
       }
-
-
     </>
   );
 };

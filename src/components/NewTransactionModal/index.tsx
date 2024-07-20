@@ -134,8 +134,8 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
         <Box
           sx={style}
         >
-          <h1 className="text-xl font-semibold text-center">Adicionar um novo registro</h1>
-          <p className="text-sm text-[#155EEF] text-center">Lembre-se de compartilhar a planilha no modo <strong>Editor</strong>, caso contrário não será possível adicionar os dados.</p>
+          <h1 className="text-xlarge font-semibold text-center sm:text-xl">Adicionar um novo registro</h1>
+          <p className="text-small text-[#155EEF] text-center sm:text-sm">Lembre-se de compartilhar a planilha no modo <strong>Editor</strong>, caso contrário não será possível adicionar os dados.</p>
 
           <div className="flex flex-col justify-center items-center">
             <Image src={addNewImage} alt="" width={300} />

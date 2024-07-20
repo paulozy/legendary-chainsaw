@@ -1,6 +1,7 @@
 import { Box, Modal } from "@mui/material";
 import Lottie from 'react-lottie';
 import loadingLottie from '../../lotties/finances_loading.json';
+import { useWindowSize } from "../hooks/useWindowSize";
 
 type LoadingProps = {
   isModalOpen: boolean
@@ -33,19 +34,29 @@ const defaultLottieOptions = {
 }
 
 export function Loading({ isModalOpen }: LoadingProps) {
+  const { width } = useWindowSize()
+
+  const styleByWindowSize = width < 430
+    ? { ...style, width: '90%' }
+    : style
+
+  const lottieWidthByWindowSize = width < 430
+    ? 300
+    : 400
+
   return (
     <Modal
       open={isModalOpen}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
+      <Box sx={styleByWindowSize}>
         <h2 className="text-2xl font-semibold">Carregando Informações</h2>
 
         <Lottie
           options={defaultLottieOptions}
           height={250}
-          width={400}
+          width={lottieWidthByWindowSize}
         />
       </Box>
     </Modal>
