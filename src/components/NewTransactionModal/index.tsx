@@ -5,6 +5,7 @@ import addNewImage from "../../../public/add_new.svg";
 import { AppContext } from "../../contexts/AppContext";
 import { api } from "../../services/axios";
 import { TransactionType } from "../../types";
+import { useWindowSize } from "../hooks/useWindowSize";
 
 type NewTransactionModalProps = {
   handleSubmitImport: Function
@@ -31,6 +32,7 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
     setIsNewTransactionModalOpen,
     isNewTransactionModalOpen
   } = useContext(AppContext)
+  const { width } = useWindowSize()
 
   const [type, setType] = useState(TransactionType.EXPENSE)
   const [description, setDescription] = useState('')
@@ -114,6 +116,10 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
     return filtered;
   }
 
+  const styleByWindowSize = width < 430
+    ? { ...style, width: '90%' }
+    : style
+
   const categoriesSet = new Set()
   for (const transaction of transactions) {
     if (transaction) categoriesSet.add(transaction.category)
@@ -130,13 +136,13 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
         aria-describedby="modal-modal-description"
       >
         <Box
-          sx={style}
+          sx={styleByWindowSize}
         >
-          <h1 className="text-xlarge font-semibold text-center sm:text-xl">Adicionar um novo registro</h1>
-          <p className="text-small text-[#155EEF] text-center sm:text-sm">Lembre-se de compartilhar a planilha no modo <strong>Editor</strong>, caso contrário não será possível adicionar os dados.</p>
+          <h1 className="text-base font-semibold text-center sm:text-xl">Adicionar um novo registro</h1>
+          <p className="text-tiny text-[#155EEF] text-center sm:text-sm">Lembre-se de compartilhar a planilha no modo <strong>Editor</strong>, caso contrário não será possível adicionar os dados.</p>
 
           <div className="flex flex-col justify-center items-center">
-            <Image src={addNewImage} alt="" width={300} />
+            <Image src={addNewImage} alt="" width={width < 430 ? 200 : 300} />
 
             <Box>
               <div className="flex justify-between items-center gap-3">

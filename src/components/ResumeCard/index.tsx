@@ -20,11 +20,11 @@ export function ResumeCard({
   }).format(amount)
 
   return (
-    <div className="w-full flex items-center justify-between bg-white p-6 rounded-md drop-shadow-md sm:block">
-      <p className="text-xlarge text-[#516778] sm:text-base">{title}</p>
+    <div className="w-full flex items-center justify-between bg-white p-3 rounded-md drop-shadow-md sm:block sm:p-6">
+      <p className="text-large text-[#516778] sm:text-base">{title}</p>
       <div className="flex justify-between items-center gap-5 mt-2">
         <h2
-          className={`text-2xlarge ${isBalance ? `${amount > 0 ? "text-green-500" : "text-red-500"}` : ""} font-semibold sm:text-2xlarge`}
+          className={`text-xlarge ${isBalance ? `${amount > 0 ? "text-green-500" : "text-red-500"}` : ""} font-semibold sm:text-2xlarge`}
         >
           {formattedAmount}
         </h2>

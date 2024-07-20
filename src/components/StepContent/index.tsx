@@ -46,7 +46,6 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
 
   const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  const handleReset = () => setActiveStep(0);
 
   const onChangeName = (e) => {
     if (e.target.value.length < 3) {
@@ -77,14 +76,13 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
   const stepMarginBottom = windowWidth < 430 ? 0 : 2
 
   return (
-    <div className="mt-5">
+    <div className="mt-2 sm:mt-5">
       <h2 className="font-bold text-2xl text-center text-black">Aqui é <span className="text-[#155EEF]">TUDO</span> muito <span className="text-[#155EEF]">SIMPLES</span></h2>
-      <p className="text-[16px] text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ideia dos próximos passos.</p>
+      <p className="text-base text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ideia dos próximos passos.</p>
 
-
-      <div className="p-2 sm:flex sm:justify-center sm:items-center">
+      <div className="p-1 sm:flex sm:justify-center sm:items-center sm:p-2">
         <div>
-          <Box sx={{ maxWidth: 395, minWidth: 350 }} className="mt-5">
+          <Box sx={{ maxWidth: 395, minWidth: 350 }} className="mt-2 sm:mt-5">
             <Stepper activeStep={activeStep} orientation="vertical">
               {steps.map((step, index) => (
                 <Step key={step.label}>
@@ -98,8 +96,8 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
                     {step.label}
                   </StepLabel>
                   <StepContent>
-                    <Typography>{step.description}</Typography>
-                    <Typography style={{ fontSize: 13 }}>{step.instructions}</Typography>
+                    <Typography style={{ fontSize: 13 }}>{step.description}</Typography>
+                    <Typography style={{ fontSize: 14 }}>{step.instructions}</Typography>
                     <Box sx={{ mb: stepMarginBottom }}>
                       <div>
                         {index === 1 ?
@@ -157,7 +155,6 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
                             Continue
                           </Button>
                         )}
-
                         <Button
                           variant={backButtonVariant}
                           disabled={index === 0}

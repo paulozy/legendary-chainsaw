@@ -88,10 +88,6 @@ const Home: NextPage = () => {
     { icon: <SpeedDialButton type={SpeedDialTypeEnum.UPDATE} action={handleSubmitImport} />, name: 'Atualizar' },
   ];
 
-  const speedDialSxBasedOnScreenWidth = windowWidth < 430
-    ? { position: 'absolute', bottom: -150, right: 10 }
-    : { position: 'absolute', bottom: 30, right: 60 }
-
   return (
     <>
       {isLoading ? <Loading isModalOpen={isLoading} /> : null}
@@ -99,8 +95,8 @@ const Home: NextPage = () => {
 
       {
         user
-          ? (<main className="h-lvh px-3 py-3 bg-[#eff4fa] sm:px-64 sm:py-6">
-            <Header />
+          ? (<main className="h-full px-3 py-3 overflow-hidden bg-[#eff4fa] sm:px-64 sm:py-6">
+            <Header update={handleSubmitImport} addNew={setIsNewTransactionModalOpen} />
 
             {/* cards */}
             <ResumeCardGroup />
@@ -111,19 +107,21 @@ const Home: NextPage = () => {
               <LastTransactionsTable />
             </section>
 
-            <SpeedDial
-              ariaLabel="SpeedDial basic example"
-              sx={speedDialSxBasedOnScreenWidth}
-              icon={<SpeedDialIcon />}
-            >
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                />
-              ))}
-            </SpeedDial>
+            {windowWidth > 430 ? (
+              <SpeedDial
+                ariaLabel="SpeedDial basic example"
+                sx={{ position: 'absolute', bottom: 30, right: 60 }}
+                icon={<SpeedDialIcon />}
+              >
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                  />
+                ))}
+              </SpeedDial>
+            ) : null}
           </main>)
           : <TutorModal handleSubmit={handleSubmitImport} />
       }
