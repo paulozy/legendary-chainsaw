@@ -2,6 +2,7 @@ import { Box, Button, Modal, Step, StepLabel, Stepper } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../contexts/AppContext";
 import { StepContentOne, StepContentTwo } from "../StepContent";
+import { useWindowSize } from "../hooks/useWindowSize";
 
 export const modalDefaultStyle = {
   position: 'absolute' as 'absolute',
@@ -30,8 +31,13 @@ export const TutorModal = ({ handleSubmit }: TutorModalProps) => {
     spreadsheetURL,
     setSpreadsheetURL
   } = useContext(AppContext)
-
   const [activeStep, setActiveStep] = useState(0);
+  const { width } = useWindowSize()
+
+  const modalDefaultStyleByWindowSize =
+    width < 430
+      ? { ...modalDefaultStyle, width: '95%', py: 2, px: 1 }
+      : modalDefaultStyle
 
   const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
   const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -42,7 +48,7 @@ export const TutorModal = ({ handleSubmit }: TutorModalProps) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={modalDefaultStyle}>
+      <Box sx={modalDefaultStyleByWindowSize}>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps: { completed?: boolean } = {};

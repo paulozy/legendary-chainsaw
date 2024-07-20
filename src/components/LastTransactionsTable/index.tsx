@@ -28,7 +28,7 @@ export function LastTransactionsTable() {
   }
 
   return (
-    <div className="flex-1 bg-white rounded-xl overflow-hidden">
+    <div className="mt-3 flex-1 bg-white rounded-xl overflow-hidden">
       <div className="p-6">
         <h3 className="font-semibold text-[18px]">Últimos registros</h3>
         <p className="text-[#516778] text-sm">

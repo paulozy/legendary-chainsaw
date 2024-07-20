@@ -2,6 +2,7 @@ import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import { NextPage } from "next";
 import { useContext } from "react";
 import { Header } from "../src/components/Header";
+import { useWindowSize } from "../src/components/hooks/useWindowSize";
 import { LastTransactionsTable } from "../src/components/LastTransactionsTable";
 import { Loading } from "../src/components/Loading";
 import { NewTransactionModal } from "../src/components/NewTransactionModal";
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
     fetchTransactions,
     getOptions,
   } = useContext(AppContext)
+  const { width: windowWidth } = useWindowSize()
 
   const handleSubmitImport = async () => {
     try {
@@ -73,6 +75,10 @@ const Home: NextPage = () => {
 
       setIsLoading(false)
     } catch (error) {
+      if (error.message.includes('timeout')) {
+        alert('Tempo de carregamento muito longo, tente novamente! Conexão Lenta.')
+      }
+
       setIsLoading(false)
     }
   }
@@ -89,31 +95,33 @@ const Home: NextPage = () => {
 
       {
         user
-          ? (<main className="h-lvh px-64 py-6 bg-[#eff4fa]">
-            <Header />
+          ? (<main className="h-full px-3 py-3 overflow-hidden bg-[#eff4fa] sm:px-64 sm:py-6">
+            <Header update={handleSubmitImport} addNew={setIsNewTransactionModalOpen} />
 
             {/* cards */}
             <ResumeCardGroup />
 
             {/* chart and table */}
-            <section className="flex gap-8 mt-8">
+            <section className=" w-full mt-5 drop-shadow-md sm:flex sm:gap-8 sm:mt-8">
               <PieChart />
               <LastTransactionsTable />
             </section>
 
-            <SpeedDial
-              ariaLabel="SpeedDial basic example"
-              sx={{ position: 'absolute', bottom: 30, right: 60 }}
-              icon={<SpeedDialIcon />}
-            >
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  tooltipTitle={action.name}
-                />
-              ))}
-            </SpeedDial>
+            {windowWidth > 430 ? (
+              <SpeedDial
+                ariaLabel="SpeedDial basic example"
+                sx={{ position: 'absolute', bottom: 30, right: 60 }}
+                icon={<SpeedDialIcon />}
+              >
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    tooltipTitle={action.name}
+                  />
+                ))}
+              </SpeedDial>
+            ) : null}
           </main>)
           : <TutorModal handleSubmit={handleSubmitImport} />
       }

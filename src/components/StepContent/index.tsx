@@ -3,12 +3,13 @@ import Image from "next/image";
 import { useState } from "react";
 import dataAnalysisImage from '../../../public/data_analysis.svg';
 import stepsImage from '../../../public/steps.svg';
+import { useWindowSize } from "../hooks/useWindowSize";
 
 export function StepContentOne() {
   return (
     <div className="mt-5 flex flex-col justify-center text-center items-center">
-      <h2 className="font-bold text-3xl">Seja bem-vindo(a) ao <span className="text-[#155EEF]">Resumos Financeiros</span></h2>
-      <p className="text-[16px] text-[#516778] mt-1">Um aplicativo criado para visualizar a sua vida financeira de forma simples, fácil e rápido</p>
+      <h2 className="font-bold text-2xlarge leading-none sm:text-3xl ">Seja bem-vindo(a) ao <span className="text-[#155EEF]">Resumos Financeiros</span></h2>
+      <p className="text-base text-[#516778] mt-1">Um aplicativo criado para visualizar a sua vida financeira de forma simples, fácil e rápido</p>
 
       <Image src={dataAnalysisImage} alt="" width={700} />
     </div>
@@ -41,10 +42,10 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
   const [activeStep, setActiveStep] = useState(0);
   const [msgNameError, setMsgNameError] = useState({ error: false, msg: null })
   const [msgSpreadsheetURLError, setMsgSpreadsheetURLError] = useState({ error: false, msg: null })
+  const { width: windowWidth } = useWindowSize()
 
   const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  const handleReset = () => setActiveStep(0);
 
   const onChangeName = (e) => {
     if (e.target.value.length < 3) {
@@ -72,15 +73,16 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
   const backButtonMargin = activeStep === steps.length - 1 ? 0 : 1
   const backButtonVariant = activeStep === steps.length - 1 ? "contained" : "text"
 
+  const stepMarginBottom = windowWidth < 430 ? 0 : 2
+
   return (
-    <div className="mt-5">
+    <div className="mt-2 sm:mt-5">
       <h2 className="font-bold text-2xl text-center text-black">Aqui é <span className="text-[#155EEF]">TUDO</span> muito <span className="text-[#155EEF]">SIMPLES</span></h2>
-      <p className="text-[16px] text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ideia dos próximos passos.</p>
+      <p className="text-base text-[#516778] mt-1 text-center">Com o passo a passo abaixo você terá uma ideia dos próximos passos.</p>
 
-
-      <div className="flex justify-center items-center">
+      <div className="p-1 sm:flex sm:justify-center sm:items-center sm:p-2">
         <div>
-          <Box sx={{ maxWidth: 395, minWidth: 395 }} className="mt-5">
+          <Box sx={{ maxWidth: 395, minWidth: 350 }} className="mt-2 sm:mt-5">
             <Stepper activeStep={activeStep} orientation="vertical">
               {steps.map((step, index) => (
                 <Step key={step.label}>
@@ -94,10 +96,10 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
                     {step.label}
                   </StepLabel>
                   <StepContent>
-                    <Typography>{step.description}</Typography>
-                    <Typography style={{ fontSize: 13 }}>{step.instructions}</Typography>
-                    <Box sx={{ mb: 2 }}>
-                      <div className="">
+                    <Typography style={{ fontSize: 13 }}>{step.description}</Typography>
+                    <Typography style={{ fontSize: 14 }}>{step.instructions}</Typography>
+                    <Box sx={{ mb: stepMarginBottom }}>
+                      <div>
                         {index === 1 ?
                           <Button
                             variant="contained"
@@ -153,7 +155,6 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
                             Continue
                           </Button>
                         )}
-
                         <Button
                           variant={backButtonVariant}
                           disabled={index === 0}
@@ -171,7 +172,7 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
           </Box>
         </div>
 
-        <Image src={stepsImage} alt="" width={450} />
+        {windowWidth < 430 ? null : <Image src={stepsImage} alt="" width={450} />}
       </div>
     </div >
   )
