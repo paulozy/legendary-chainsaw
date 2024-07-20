@@ -18,7 +18,7 @@ export function ResumeCardGroup() {
   const balance = receipts - (expenses + invests)
 
   return (
-    <section className="w-full grid grid-cols-4 gap-8 mt-10">
+    <section className="w-full grid grid-cols-1 gap-2 mt-4 sm:grid-cols-4 sm:gap-8 sm:mt-10">
       <ResumeCard isBalance={true} title="Balanço" amount={balance} variation={10} />
       <ResumeCard title="Receitas" amount={receipts} variation={12} />
       <ResumeCard title="Despesas" amount={expenses} variation={-1} />

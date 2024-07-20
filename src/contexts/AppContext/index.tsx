@@ -37,10 +37,7 @@ type FetchTransactionsReturn = { transactions: Transaction[], categories: [strin
 const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> => {
   const uriParam = encodeURIComponent(user.spreadsheetURI);
 
-  const response = await api.get(`transactions?uri=${uriParam}`)
-    .catch(err => {
-      alert(err.error)
-    }) as any
+  const response = await api.get(`transactions?uri=${uriParam}`, { timeout: 4500 })
 
   const { transactions, categories } = response.data
 
@@ -54,16 +51,6 @@ const getOptions = (categories: [string]) => {
       legend: {
         position: "bottom" as const,
       },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200,
-            },
-          },
-        },
-      ],
       tooltip: {
         y: {
           formatter: function (value) {
