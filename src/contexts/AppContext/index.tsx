@@ -37,11 +37,7 @@ type FetchTransactionsReturn = { transactions: Transaction[], categories: [strin
 const fetchTransactions = async (user: User): Promise<FetchTransactionsReturn> => {
   const uriParam = encodeURIComponent(user.spreadsheetURI);
 
-  const response = await api.get(`transactions?uri=${uriParam}`)
-    .catch(err => {
-      console.log('pqp', err)
-      alert(err.error)
-    }) as any
+  const response = await api.get(`transactions?uri=${uriParam}`, { timeout: 4500 })
 
   const { transactions, categories } = response.data
 

@@ -75,6 +75,10 @@ const Home: NextPage = () => {
 
       setIsLoading(false)
     } catch (error) {
+      if (error.message.includes('timeout')) {
+        alert('Tempo de carregamento muito longo, tente novamente! Conexão Lenta.')
+      }
+
       setIsLoading(false)
     }
   }

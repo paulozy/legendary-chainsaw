@@ -84,7 +84,7 @@ export function StepContentTwo({ userName, setUserName, spreadsheetURL, setSprea
 
       <div className="p-2 sm:flex sm:justify-center sm:items-center">
         <div>
-          <Box sx={{ maxWidth: 395, minWidth: 395 }} className="mt-5">
+          <Box sx={{ maxWidth: 395, minWidth: 350 }} className="mt-5">
             <Stepper activeStep={activeStep} orientation="vertical">
               {steps.map((step, index) => (
                 <Step key={step.label}>

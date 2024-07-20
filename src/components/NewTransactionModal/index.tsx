@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, createFilterOptions, FormControl, InputAdornment, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Snackbar, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, createFilterOptions, FormControl, InputAdornment, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField } from "@mui/material";
 import Image from "next/image";
 import { useContext, useState } from "react";
 import addNewImage from "../../../public/add_new.svg";
@@ -29,9 +29,7 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
     user,
     transactions,
     setIsNewTransactionModalOpen,
-    isNewTransactionModalOpen,
-    isToastOpen,
-    setIsToastOpen
+    isNewTransactionModalOpen
   } = useContext(AppContext)
 
   const [type, setType] = useState(TransactionType.EXPENSE)
@@ -223,15 +221,6 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
           </div>
         </Box >
       </Modal >
-
-      <Snackbar
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isToastOpen}
-        onClose={() => setIsToastOpen(false)}
-        message="Registro criado com sucesso"
-        key={'top' + 'center'}
-      />
     </>
   )
 }
