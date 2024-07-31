@@ -67,11 +67,15 @@ export function NewTransactionModal({ handleSubmitImport }: NewTransactionModalP
   const handleSubmit = async () => {
     const categoryFinded = categories.find((ctg: { title: string }) => ctg.title.toLowerCase() === category.title)
 
+    const normalizedCategory = category.title.toLowerCase().replace(/\w\S*/g, (word) => {
+      return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+    })
+
     const transaction = {
       type: type.toUpperCase(),
       description,
       value: parseFloat(amount),
-      category: categoryFinded ? categoryFinded : category.title,
+      category: categoryFinded ? categoryFinded : normalizedCategory,
       date: new Date().toISOString().split('T')[0]
     }
 
